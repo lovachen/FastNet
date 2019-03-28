@@ -1,0 +1,124 @@
+﻿@page
+@model AiBao.Web.Pages.Admin.SysMgr.ActivityLogCommentModel
+@{
+    ViewData["Title"] = "操作日志业务说明";
+    var canInit = WorkContext.IsPermit("/admin/sysmgr/activitylogcommentinit");
+    var canEdit = WorkContext.IsPermit("/admin/sysmgr/editactivitylogcomment");
+}
+
+
+<section class="content-header">
+    <h1>
+        操作日志业务说明
+        <small>系统表业务说明</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin/home"><i class="fa fa-dashboard"></i> 主界面</a></li>
+        <li class="active">操作日志业务说明</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-solid">
+        <div class="box-body no-padding">
+            @if (canInit)
+            {
+                <button type="button" data-url="/admin/sysmgr/activitylogcommentinit" class="btn bg-aqua margin btnInit"><i class="fa  fa-circle-o-notch"></i>初始化</button>
+            }
+        </div>
+    </div>
+    <div class="box box-solid">
+        <div class="box-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th width="40%">表名</th>
+                        <th width="60%">业务说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.ActivityLogComments != null)
+                    {
+                        foreach (var item in Model.ActivityLogComments)
+                        {
+                            <tr>
+                                <td>@item.EntityName</td>
+                                <td>
+                                    <a href="javascript:" class="editable editable-click" data-url="/admin/sysmgr/editactivitylogcomment" data-title="请输入业务说明" data-type="text" data-pk="@item.EntityName">@item.Comment</a>
+                                    <small>(点击修改)</small>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>表名</th>
+                        <th>业务说明</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</section>
+<script>
+
+    $(function () {
+        if (@Json.Serialize(canEdit)) {
+            $.fn.editable.defaults.mode = 'inline';
+            $('.editable').editable({
+                ajaxOptions: {
+                    type: 'get',
+                    dataType: 'json'
+                },
+                success: function (response) {
+                    if (response.Code !== 0) return response.Message;
+                }
+            });
+        }
+        $('.btnInit').click(function (e) {
+            e.preventDefault();
+            var _url = $(this).data('url');
+            layer.confirm('您确定要初始化？', function () {
+                var index = layer.load(2);
+                $.get(_url, function (res) {
+                    layer.close(index);
+                    if (res.Code === 0) {
+                        layer.alert(res.Message, { icon: 1 }, function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        layer.msg(res.Message, { icon: 2 });
+                    }
+                });
+            });
+
+
+            $('.editable').editable({
+                ajaxOptions: {
+                    type: 'get',
+                    dataType: 'json'
+                },
+                success: function (response) {
+                    if (response.Code !== 0) return response.Message;
+                }
+            });
+        });
+
+    });
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

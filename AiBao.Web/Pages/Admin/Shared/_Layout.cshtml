@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/LTE/css/AdminLTE.min.css" rel="stylesheet" />
+    <link href="~/LTE/css/skins/_all-skins.min.css" rel="stylesheet" />
+    <link href="~/dataTables/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet" />
+    <title>@ViewBag.Title</title>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="~/LTE/js/adminlte.min.js"></script>
+    <script src="~/layer/layer.js"></script>
+</head>
+<body class="hold-transition skin-blue fixed sidebar-mini">
+    <div class="wrapper">
+        <partial name="_Header.cshtml" />
+        <partial name="_Sidebar.cshtml" />
+        <div class="content-wrapper">
+            @RenderBody()
+        </div>
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2019-@DateTime.Now.Year <a href="/">@SiteContext.Settings.SiteName</a>.</strong> All rights
+            reserved.
+        </footer>
+    </div>
+    <script src="~/dataTables/js/jquery.dataTables.min.js"></script>
+    <script src="~/dataTables/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/js/jquery.form.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    @*<script src="~/bootstrap-editable/js/bootstrap-editable.min.js"></script>*@
+    <script src="~/bootstrap-editable/js/bootstrap-editable.js"></script>
+</body>
+</html> 

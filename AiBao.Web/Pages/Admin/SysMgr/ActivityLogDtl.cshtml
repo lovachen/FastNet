@@ -1,0 +1,50 @@
+﻿@page
+@model AiBao.Web.Pages.Admin.SysMgr.ActivityLogDtlModel
+@using Newtonsoft.Json.Linq
+
+@{
+    Layout = null;
+}
+<div class="space-10"></div>
+<div class="col-sm-12">
+
+    <dl class="dl-horizontal">
+        <dt>表名</dt>
+        <dd>@Model.ActivityLog.EntityName</dd>
+        <dt>操作时间</dt>
+        <dd>@Model.ActivityLog.CreationTimeForamt</dd>
+        <dt>类型</dt>
+        <dd><span class="label label-success">@Model.ActivityLog.Method</span></dd>
+        <dt>操作人</dt>
+        <dd>@Model.ActivityLog.UserName (@Model.ActivityLog.UserAccount)</dd>
+        <dt>结果对比</dt>
+        <dd>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>字段名</th>
+                        <th>旧值</th>
+                        <th>新值</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.OldObject != null || Model.NewObject != null)
+                    {
+                        var obj = Model.OldObject ?? Model.NewObject;
+                        foreach (JToken item in obj.Children())
+                        {
+                            <tr>
+                                <td>@item.Path</td>
+                                <td>@(Model.OldObject != null ? Model.OldObject[item.Path] : "")</td>
+                                <td>@(Model.NewObject != null ? Model.NewObject[item.Path] : "")</td>
+                            </tr>
+                        }
+
+                    }
+                </tbody>
+            </table>
+        </dd>
+    </dl>
+
+
+</div>

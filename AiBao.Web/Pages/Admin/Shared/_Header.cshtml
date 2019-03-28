@@ -1,0 +1,76 @@
+﻿@{ 
+    var user = WorkContext.GetUserData(0);
+}
+<header class="main-header">
+    <!-- Logo -->
+    <a href="/admin" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><b>A</b>LT</span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg">@SiteContext.Settings.SiteName</span>
+    </a>
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+            <span class="sr-only">Toggle navigation</span>
+        </a>
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <!-- User Account: style can be found in dropdown.less -->
+                <li class="dropdown user user-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img src="~/LTE/img/user2-160x160.jpg" class="user-image" alt="User Image" />
+                        <span class="hidden-xs">@user.Name @user.Account</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <!-- User image -->
+                        <li class="user-header">
+                            <img src="~/LTE/img/user2-160x160.jpg" class="img-circle" alt="User Image" />
+                            <p>
+                                @user.Name
+                                <small>@user.Account</small>
+                            </p>
+                        </li>
+                        <!-- Menu Footer-->
+                        <li class="user-footer">
+                            <div class="pull-left">
+                                <a href="/admin/profile" class="btn btn-default btn-flat">个人中心</a>
+                            </div>
+                            <div class="pull-right">
+                                <a href="javascript:" class="btn btn-default btn-flat btn-out">退出</a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<script>
+    $('.btn-out').click(function (e) {
+        e.preventDefault();
+        layer.confirm('您确定要退出系统？', function () {
+            $.get('/admin/profile/signout', function () {
+                window.location.reload();
+            })
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

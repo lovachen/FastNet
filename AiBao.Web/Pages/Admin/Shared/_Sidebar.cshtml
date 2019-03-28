@@ -1,0 +1,68 @@
+﻿@{
+    var path = ViewContext.HttpContext.Request.Path.Value;
+    var user = WorkContext.GetUserData(0);
+    var categories = WorkContext.GetMyCategories(0);
+
+}
+
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="~/LTE/img/user2-160x160.jpg" class="img-circle" alt="User Image" />
+            </div>
+            <div class="pull-left info">
+                <p><a href="/admin/profile">@user.Name</a></p>
+                <a href="/admin/profile"><i class="fa fa-circle text-success"></i> @user.Account</a>
+            </div>
+        </div>
+        <!-- /.search form -->
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">MAIN NAVIGATION</li>
+            <li class="@(path.Contains("/admin/home",StringComparison.InvariantCultureIgnoreCase) ? "active" : "")">
+                <a href="/admin/home">
+                    <i class="fa fa-dashboard"></i> <span>主界面</span>
+                </a>
+            </li>
+            @{
+                var fathers = categories.Where(o => String.IsNullOrEmpty(o.FatherCode)).OrderBy(o => o.Sort).ToList();
+                foreach (var father in fathers)
+                {
+                    var childNodes = categories.Where(o => o.FatherCode == father.Code).OrderBy(o => o.Sort).ToList();
+                    bool any = childNodes.Any(o => path.Contains(o.RouteTemplate, StringComparison.InvariantCultureIgnoreCase));
+
+                    <li class="treeview @(any ? "active menu-open" : "")">
+                        <a href="@(String.IsNullOrEmpty(father.RouteTemplate) ? "javascript:" : father.RouteTemplate )">
+                            <i class="@father.IconClass"></i>
+                            <span>@father.Name</span>
+                            @if (childNodes.Any())
+                            {
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            }
+                        </a>
+                        @if (childNodes.Any())
+                        {
+                            <ul class="treeview-menu">
+                                @foreach (var child in childNodes)
+                                {
+                                    <li class="@(path.Equals(child.RouteTemplate,StringComparison.InvariantCultureIgnoreCase) ? "active" : "")">
+                                        <a href="@child.RouteTemplate">
+                                            <i class="@(String.IsNullOrEmpty(child.IconClass) ? "fa fa-circle-o" : child.IconClass)"></i>@child.Name
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </li>
+                }
+            }
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>

@@ -1,0 +1,68 @@
+﻿@page
+@model AiBao.Web.Pages.Admin.SysMgr.UserRolesModel
+@{
+    Layout = null;
+}
+
+<div class="col-sm-12">
+    <div class="space-10"></div>
+    <div class="callout " style="margin-bottom: 0!important;">
+        <h4><i class="fa fa-info"></i> 您正在配置用户【@Model.SysUser.Name (@Model.SysUser.Account)】的角色</h4> 
+    </div>
+    <div class="space-10"></div>
+    <form asp-page="UserRoles" method="post" id="formUserRole" class="form-horizontal" onsubmit="return false;">
+        @Html.Hidden("Id", Model.SysUser.Id)
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h3 class="box-title">选择角色</h3>
+            </div>
+            <div class="box-body">
+
+                @if (Model.Roles != null)
+                {
+                    foreach (var role in Model.Roles)
+                    {
+                        bool any = Model.UserRoles != null && Model.UserRoles.Any(o => o.RoleId == role.Id);
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="RoleIds" @(any ? "checked=checked" : "") value="@role.Id">@role.Name
+                            </label>
+                        </div>
+                    }
+                }
+
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-5 col-sm-2">
+                <button type="submit" class="btn btn-block btn-success">
+                    <i class="fa fa-save"></i> 保存
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    $(function () {
+        $('#formUserRole').submit(function (e) {
+            e.preventDefault();
+            var index = layer.load(2);
+            $(this).ajaxSubmit(function (res) {
+                layer.close(index);
+                layer.msg(res.Message, { icon: res.Code === 0 ? 1 : 2 });
+            });
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,123 @@
+﻿@page
+@model AiBao.Web.Pages.Admin.SysMgr.ActivityLogModel
+@{
+    ViewData["Title"] = "操作日志";
+    bool canDtl = WorkContext.IsPermit("/admin/sysmgr/activitylogdtl");
+}
+
+<style>
+    .table-responsive-md {
+        min-width: 1000px;
+    }
+</style>
+<section class="content-header">
+    <h1>
+        用户操作日志
+        <small>系统后台用户操作日志记录</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin/home"><i class="fa fa-dashboard"></i> 主界面</a></li>
+        <li class="active">用户操作日志</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="box box-info">
+        <div class="box-body">
+            <form class="form-inline" onsubmit="return false" id="formSearch">
+                <div class="form-group">
+                    <label for="q">关键字</label>
+                    <input type="text" class="form-control" id="q" name="q" placeholder="账号、姓名">
+                </div>
+                <button type="submit" class="btn bg-purple"><i class="fa fa-search"></i> 查询</button>
+            </form>
+        </div>
+    </div>
+    <div class="box box-solid">
+        <!-- /.box-header -->
+        <div class="box-body">
+            <table id="table_activitylog" class="table table-bordered table-striped table-responsive-md">
+                <thead>
+                    <tr>
+                        <th>业务说明</th>
+                        <th>表名</th>
+                        <th>类型</th>
+                        <th>姓名</th>
+                        <th>账号</th>
+                        <th>时间</th>
+                        <th>详情</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+</section>
+<script>
+
+
+    $(function () {
+        // "orderable": false
+        var table = $('#table_activitylog').DataTable({
+            language: { url: '/dataTables/chinese.json' },
+            serverSide: true,
+            processing: true,
+            searching: false,
+            scrollX: true,
+            ajax: {
+                url: '/admin/sysmgr/activitylog?handler=data',
+                data: function (d) {
+                    d.q = $('#q').val();
+                }
+            },
+            order:[[5,'desc']],
+            columns: [
+                { "width": '25%', data: "Comment", "orderable": false },
+                { "width": '20%',data: "EntityName" },
+                { "width": '10%',data: "Method" },
+                { "width": '10%',data: "UserName" },
+                { "width": '12%',data: "UserAccount" },
+                { "width": '18%',data: "CreationTimeForamt" }
+            ],
+            columnDefs: [  
+                {
+                    "targets": 6,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        var id = row.Id;
+                        if (@Json.Serialize(canDtl)) {
+                            var html = "<button data-url='/admin/sysmgr/activitylogdtl?id=" + id + "' class='btn btn-link btn-xs btnDetails'><i class='fa fa-search-plus'></i> 查看</button>"
+                            return html;
+                        } else {
+                            return '';
+                        }
+                    }
+                }
+            ],
+            rowCallback: function (row, data) {
+                $(row).find('.btnDetails').click(function (e) {
+                    var _url = $(this).data('url');
+                    var load = layer.load(2);
+                    $.get(_url, function (html) {
+                        layer.close(load);
+                        layer.open({
+                            type: 1,
+                            maxmin: true,
+                            area: ['80%', '80%'],
+                            title: "预览操作日志详情",
+                            content: html
+                        });
+                    });
+                });
+            }
+        });
+        $('#formSearch').submit(function (e) {
+            e.preventDefault();
+            table.draw();;
+        });
+
+
+
+    })
+</script>

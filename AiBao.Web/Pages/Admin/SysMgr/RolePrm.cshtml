@@ -1,0 +1,99 @@
+﻿@page
+@model AiBao.Web.Pages.Admin.SysMgr.RolePrmModel
+@{
+    Layout = null;
+}
+
+@functions{
+    public HtmlString RenderCategory(Sys_CategoryMapping item)
+    {
+        var childNodes = Model.Sys_Categories.Where(o => o.FatherCode == item.Code).ToList();
+
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+        sb.Append("<tr>");
+        sb.Append("<td style=\"min-width:200px;\">");
+        sb.Append("<div class=\"checkbox\">");
+
+        if (Model.Permissions.Any(o => o.CategoryId == item.Id))
+        {
+            sb.Append("<label class=\"text-danger\">");
+            sb.Append("<input type=\"checkbox\" name=\"categoryIds\" value=\"" + item.Id + "\" checked=\"checked\" />");
+        }
+        else
+        {
+            sb.Append("<label>");
+            sb.Append("<input type=\"checkbox\" name=\"categoryIds\" value=\"" + item.Id + "\" />");
+        }
+        sb.Append(item.Name);
+        sb.Append("</label");
+        sb.Append("</div>");
+        sb.Append("</td>");
+
+        if (childNodes.Any())
+        {
+            sb.Append("<td>");
+            sb.Append("<table class=\"table table-striped table-bordered dataTable no - footer\">");
+            sb.Append("<tbody>");
+
+            foreach (var node in childNodes)
+            {
+                sb.Append(RenderCategory(node));
+            }
+
+            sb.Append("</tbody>");
+            sb.Append("</table>");
+            sb.Append("</td>");
+        }
+        else
+        {
+            sb.Append("<td></td>");
+        }
+
+        sb.Append("</tr>");
+        return new HtmlString(sb.ToString());
+    }
+}
+<div class="col-sm-12">
+    <div class="space-10"></div>
+    <div class="callout " style="margin-bottom: 0!important;">
+        <h4><i class="fa fa-info"></i> 您正在配置【@Model.Role.Name】的权限数据</h4>
+        @Model.Role.Description
+    </div>
+    <form asp-page="RolePrm" method="post" id="formRolePermission" class="form-horizontal" onsubmit="return false;">
+        @Html.Hidden("Id", Model.Role.Id)
+        <div style="height:600px; overflow:auto;">
+            <table id="user_datatable" class="table table-striped table-bordered table-hover dataTable no-footer">
+                <tbody>
+                    @{
+                        var nodes = Model.Sys_Categories.Where(o => String.IsNullOrEmpty(o.FatherCode)).OrderBy(o => o.Sort).ToList();
+                        foreach (var node in nodes)
+                        {
+                            @RenderCategory(node);
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+            <div class="form-group">
+                <div class="col-sm-offset-5 col-sm-2">
+                    <button type="submit" class="btn btn-block btn-success">
+                        <i class="fa fa-save"></i> 保存
+                    </button>
+                </div>
+            </div>
+    </form>
+</div>
+<script>
+    $(function () {
+        $('#formRolePermission').submit(function () {
+           var index = layer.load(2);
+            $(this).ajaxSubmit(function (res) {
+                layer.close(index);
+                layer.msg(res.Message, { icon: res.Code === 0 ? 1 : 2 });
+            });
+        });
+    });
+</script>
+
+

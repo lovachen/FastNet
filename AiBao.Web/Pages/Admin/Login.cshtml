@@ -1,0 +1,122 @@
+﻿@page
+@model LoginModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>登陆</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link href="~/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- Theme style -->
+    <link href="~/LTE/css/AdminLTE.min.css" rel="stylesheet" />
+
+</head>
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="javascript:(0)">@SiteContext.Settings.SiteName</a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="login-box-body">
+            <p class="login-box-msg">请输入您的登录信息 </p>
+            
+            <form method="post" onsubmit="return false;">
+                <div class="form-group has-feedback">
+                    <input type="text" asp-for="Login.Account" class="form-control" placeholder="请输入您的账号" />
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                    <span asp-validation-for="Login.Account" class="text-danger"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input type="password" asp-for="Login.Password" class="form-control" placeholder="请输入您的密码">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    <span asp-validation-for="Login.Password" class="text-danger"></span>
+                </div>
+                <div class="row">
+                    <div class="col-xs-8">
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-xs-4">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">登 陆</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+            <div class="social-auth-links text-center">
+                <div class="text-danger" asp-validation-summary="ModelOnly">
+
+                </div>
+            </div>
+        </div>
+        <!-- /.login-box-body -->
+    </div>
+    <!-- /.login-box -->
+    <!-- jQuery 3 -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="~/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/js/jquery.form.js"></script> 
+    <script src="~/js/jquery.md5.js"></script>
+    <script src="~/layer/layer.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        $(function () {
+            $('form').submit(function (e) {
+                if ($(this).valid()) {
+                    var btn = $(this).find('[type="submit"]').addClass('disabled').attr('disabled', 'disabled');
+                    var account = $(this).find('#Login_Account').val();
+                    var password = $(this).find('#Login_Password').val();
+                    var _vertoken = $(this).find('[name="__RequestVerificationToken"]').val();
+                    console.log(_vertoken);
+                    var _url = this.action;
+                    $.ajax({
+                        url: '/admin/login/salt',
+                        data: { "Account": account },
+                        success: (res) => {
+                            if (res.Code === 0) {
+                                console.log(res);
+                                password = $.md5($.md5(password + res.Result.Salt) + res.Result.R);
+                                console.log(password);
+                                $.ajax({
+                                    url: _url,
+                                    type:'post',
+                                    dataType:'json',
+                                    data: { "Account": account, "Password": password, "__RequestVerificationToken": _vertoken},
+                                    success: function (res) {
+                                        if (res.Code === 0) {
+                                            window.location.href = res.Result.Url;
+                                        } else {
+                                            layer.msg(res.Message, { icon: 2 });
+                                        }
+                                    },
+                                    complete: (res) => {
+                                        console.log(res);
+                                        btn.removeAttr('disabled').removeClass('disabled');
+                                    }
+                                });
+                            } else {
+                                layer.msg(res.Message, { icon: 2 });
+                            }
+                        },
+                        error: (res) => {
+                            btn.removeAttr('disabled').removeClass('disabled');
+                        }
+                    });
+
+                }
+            });
+        });
+    </script>
+</body>
+</html>

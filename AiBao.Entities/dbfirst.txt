@@ -1,0 +1,1 @@
+﻿ Scaffold-DbContext "data source=127.0.0.1;initial catalog=FastNet;user id=sa;password=123456;" Microsoft.EntityFrameworkCore.SqlServer -Context ABDbContext -DataAnnotations -Force -Project AiBao.Entities  -UseDatabaseNames

@@ -1,0 +1,225 @@
+﻿@page
+@model AiBao.Web.Pages.Admin.SysMgr.UserDetailsModel
+@{
+    Layout = null;
+}
+<style>
+    .table {
+        min-width: initial;
+    }
+</style>
+<div class="space-10"></div>
+<div class="col-md-3">
+
+    <!-- Profile Image -->
+    <div class="box box-primary">
+        <div class="box-body box-profile">
+            <img class="profile-user-img img-responsive img-circle" src="~/LTE/img/user4-128x128.jpg" alt="User profile picture">
+
+            <h3 class="profile-username text-center">@Model.SysUser.Name</h3>
+
+            <p class="text-muted text-center">@Model.SysUser.Account</p>
+
+            <ul class="list-group list-group-unbordered">
+                <li class="list-group-item">
+                    <b>手机</b> <a class="pull-right">@Model.SysUser.MobilePhone</a>
+                </li>
+                <li class="list-group-item">
+                    <b>邮箱</b> <a class="pull-right">@Model.SysUser.Email</a>
+                </li>
+                <li class="list-group-item">
+                    <b>IP</b> <a class="pull-right">@Model.SysUser.LastIpAddress</a>
+                </li>
+                <li class="list-group-item">
+                    <b>创建时间</b> <a class="pull-right">@Model.SysUser.CreationTime.ToString("F")</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+    <!-- About Me Box -->
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">所属角色</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            @if (Model.Roles != null)
+            {
+                foreach (var role in Model.Roles)
+                {
+                    <strong><i class="fa fa-book margin-r-5"></i>@role.Name</strong>
+                    <p class="text-muted">
+                        @role.Description
+                    </p>
+                    <hr>
+                }
+            }
+
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+</div>
+<div class="col-md-9">
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#activity" data-toggle="tab" aria-expanded="true">登陆记录</a></li>
+            <li class=""><a href="#timeline" data-toggle="tab" aria-expanded="false">操作记录</a></li>
+            <li class=""><a href="#settings" data-toggle="tab" aria-expanded="false">JWTToken</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="activity">
+                <table id="table_loginlog" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>状态</th>
+                            <th>IP地址</th>
+                            <th>登陆时间</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <!-- /.tab-pane -->
+            <div class="tab-pane" id="timeline">
+                <table id="table_activitylog" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>业务说明</th>
+                            <th>表名</th>
+                            <th>操作类型</th>
+                            <th>时间</th>
+                            <th>详情</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <!-- /.tab-pane -->
+
+            <div class="tab-pane" id="settings">
+                <table id="table_jwttoken" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Jti</th>
+                            <th>RefreshToken</th>
+                            <th>平台</th>
+                            <th>过期时间</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+        <!-- /.tab-content -->
+    </div>
+    <!-- /.nav-tabs-custom -->
+</div>
+<script>
+
+    $('#table_loginlog').dataTable({
+        language: { url: '/dataTables/chinese.json' },
+        serverSide: true,
+        searching: false,
+        paging: false,
+        ordering: false,
+        autoWidth: false,
+        ajax: {
+            url: '/admin/sysmgr/userdetails?handler=loginlog',
+            data: {
+                id:'@Model.SysUser.Id'
+            }
+        },
+        "columns": [
+            { "data": "StatusDecs" },
+            { "data": "IpAddress" },
+            { "data": "LoginTimeForamt" }
+        ],
+        "columnDefs": [{ "width": '25%', "targets": [0] },
+            { "width": '25%', "targets": [1] },
+            { "width": '50%', "targets": [2] },
+        ]
+    });
+    
+    var events = {
+        getTable: function (options) {
+            options.elm.dataTable({
+                language: { url: '/dataTables/chinese.json' },
+                serverSide: true,
+                searching: false,
+                paging: false,
+                ordering: false,
+                autoWidth: false,
+                ajax: {
+                    url: options.url,
+                    data: {
+                        id: '@Model.SysUser.Id'
+                    }
+                },
+                columns: options.columns,
+                columnDefs: options.columnDefs,
+                rowCallback: options.rowCallback
+            });
+        }
+    }
+
+    events.getTable({
+        elm: $('#table_activitylog'),
+        url: '/admin/sysmgr/userdetails?handler=activitylog',
+        columns: [
+            { data: "Comment" },
+            { data: "EntityName" },
+            { data: "Method" },
+            { data: "CreationTimeForamt" }
+        ],
+        columnDefs: [
+            { "width": '25%', "targets": [0] },
+            { "width": '25%', "targets": [1] },
+            { "width": '15%', "targets": [2] },
+            { "width": '25%', "targets": [3] },
+            {
+                "targets": 4,
+                "data": null,
+                "render": function (data, type, row) {
+                    var id = row.Id;
+                    var html = "<button data-url='/admin/sysmgr/activitylogdtl?id=" + id + "' class='btn btn-link btn-xs btnDetails'><i class='fa fa-search-plus'></i> 查看</button>" 
+                    return html;
+                }
+            }
+        ],
+        rowCallback: function (row, data) {
+            $(row).find('.btnDetails').click(function (e) {
+                var _url = $(this).data('url');
+                var load = layer.load(2);
+                $.get(_url, function (html) {
+                    layer.close(load);
+                    layer.open({
+                        type: 1,
+                        maxmin: true,
+                        area: ['80%', '80%'],
+                        title: "预览操作日志详情",
+                        content: html
+                    });
+                });
+            });
+        }
+    });
+
+    events.getTable({
+        elm: $('#table_jwttoken'),
+        url: '/admin/sysmgr/userdetails?handler=jwttoken',
+        columns: [
+            { data: "Jti" },
+            { data: "RefreshToken" },
+            { data: "PlatformName" },
+            { data: "ExpirationForamt" }
+        ],
+        columnDefs: [
+            { "width": '25%', "targets": [0] },
+            { "width": '25%', "targets": [1] },
+            { "width": '15%', "targets": [2] },
+            { "width": '35%', "targets": [3] }
+        ]
+    });
+
+</script>

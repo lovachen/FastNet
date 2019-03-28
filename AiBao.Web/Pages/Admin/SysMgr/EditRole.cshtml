@@ -1,0 +1,69 @@
+﻿@page
+@model AiBao.Web.Pages.Admin.SysMgr.EditRoleModel
+@{
+    Layout = null;
+
+}
+<div class="col-sm-12">
+    <div class="box-body">
+        <form class="form-horizontal" asp-page="EditRole" method="post" id="formEdit" onsubmit="return false;">
+            <input type="hidden" name="Role.Id" value="@(Model.Role!=null?Model.Role.Id:Guid.Empty)" />
+            <div class="box-body">
+                <div class="form-group">
+                    <label for="Role_Name" class="col-sm-3 control-label">角色名称</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" asp-for="Role.Name" placeholder="">
+                        <span asp-validation-for="Role.Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Role_Description" class="col-sm-3 control-label">描述</label>
+                    <div class="col-sm-8">
+                        <textarea class="form-control" asp-for="Role.Description"></textarea>
+                        <span asp-validation-for="Role.Description" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-6">
+                        <button type="submit" class="btn btn-block btn-success "><i class="fa fa-save"></i> 保存</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var form = $('#formEdit');
+        $.validator.unobtrusive.parse(form);
+        form.submit(function (e) {
+            e.preventDefault();
+            if (form.valid()) {
+                var loadIndex = layer.load(2);
+                form.ajaxSubmit(function (res) {
+                    layer.close(loadIndex);
+                    if (res.Code === 0) {
+                        layer.alert(res.Message, { icon: 1 }, function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        layer.msg(res.Message, { icon: 2 });
+                    }
+                    
+                });
+            }
+        });
+
+    });
+
+
+</script>
+
+
+
+
+
+
+
+

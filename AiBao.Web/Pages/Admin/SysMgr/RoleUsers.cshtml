@@ -1,0 +1,77 @@
+﻿@page
+@model AiBao.Web.Pages.Admin.SysMgr.RoleUsersModel
+@{
+    Layout = null;
+    var canDel = WorkContext.IsPermit("/admin/sysmgr/deluserrole");
+
+}
+<style>
+    .users-list li {
+        position: relative;
+    }
+
+    .badge {
+        position: absolute;
+        top: 5%;
+        right: 10%;
+    }
+</style>
+<div class="col-sm-12">
+    <div class="space-10"></div>
+    <div class="callout " style="margin-bottom: 0!important;">
+        <h4><i class="fa fa-info"></i> 预览【@Model.Role.Name】详情</h4>
+        @Model.Role.Description
+    </div>
+    <div class="space-10"></div>
+    <div class="box box-success">
+        <div class="box-header with-border">
+            <h3 class="box-title">角色用户</h3>
+        </div>
+        <div class="box-body">
+
+            @if (Model.Sys_Users != null)
+            {
+                <ul class="users-list clearfix">
+
+                    @foreach (var user in Model.Sys_Users)
+                    {
+                        <li>
+                            @if (canDel)
+                            {
+                                <span class="badge bg-red btn_del_user_role" data-url="/admin/sysmgr/deluserrole?id=@(user.Id)&roleId=@(Model.Role.Id)" title="移除关联"><i class="fa fa-close"></i></span>
+                            }
+                            <img src="~/LTE/img/user1-128x128.jpg" alt="">
+                            <a class="users-list-name" href="javascript:">@user.Name</a>
+                            <span class="users-list-date">@user.Account</span>
+                        </li>
+                    }
+                </ul>
+
+            }
+        </div>
+    </div>
+
+</div>
+<script>
+    $(function () {
+        $('.btn_del_user_role').click(function (e) {
+            e.preventDefault();
+            var _url = $(this).data('url');
+            var _li = $(this).parents('li');
+            layer.confirm('您确定要删除角色关联的用户？', function () {
+                var index = layer.load(2);
+                $.get(_url, function (res) {
+                    layer.close(index);
+                    if (res.Code === 0) {
+                        var alert = layer.alert(res.Message, { icon: 1 }, function () {
+                            _li.remove();
+                            layer.close(alert);
+                        });
+                    } else {
+                        layer.msg(res.Message, { icon: 2 });
+                    }
+                });
+            });
+        });
+    });
+</script>

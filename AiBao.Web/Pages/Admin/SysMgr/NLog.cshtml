@@ -1,0 +1,116 @@
+﻿@page
+@model AiBao.Web.Pages.Admin.SysMgr.NLogModel
+@{
+    ViewData["Title"] = "系统错误日志";
+}
+
+<style>
+    .table {
+        min-width: 1000px;
+    }
+</style>
+<section class="content-header">
+    <h1>
+        系统错误日志记录
+        <small>系统错误日志记录分析</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin/home"><i class="fa fa-dashboard"></i> 主界面</a></li>
+        <li class="active">错误日志</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="box box-info">
+        <div class="box-body">
+            <form class="form-inline" onsubmit="return false" id="formSearch">
+                <div class="form-group">
+                    <label for="q">等级</label>
+                    <select id="level" class="form-control" name="level">
+                        <option value="">不限</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn bg-purple"><i class="fa fa-search"></i> 查询</button>
+            </form>
+        </div>
+    </div>
+    <div class="box box-solid">
+        <!-- /.box-header -->
+        <div class="box-body">
+            <table id="table_log" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>等级</th>
+                        <th>时间</th>
+                        <th>说明</th>
+                        <th>来源类</th> 
+                        <th>详情</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+</section>
+<script>
+
+
+    $(function () {
+        // "orderable": false
+        var table = $('#table_log').DataTable({
+            language: { url: '/dataTables/chinese.json' },
+            serverSide: true,
+            processing: true,
+            searching: false,
+            scrollX: true,
+            ajax: {
+                url: '/admin/sysmgr/nlog?handler=data',
+                data: function (d) {
+                    d.q = $('#level').val();
+                }
+            },
+            columns: [
+                { "width": '10%', data: "Level" },
+                { "width": '25%', data: "LoggedFormat"},
+                { "width": '30%', data: "Message", "orderable": false  },
+                { "width": '25%', data: "Logger" }
+            ],
+            columnDefs: [
+                {
+                    "width": "10%",
+                    "targets": 4,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        var id = row.Id;
+                        var html = "<button data-url='/admin/sysmgr/nlogdtl?id=" + id + "' class='btn btn-link btn-xs btnDetails'><i class='fa fa-search-plus'></i> 查看</button>"
+                        return html;
+                    }
+                }
+            ],
+            rowCallback: function (row, data) {
+                $(row).find('.btnDetails').click(function (e) {
+                    var _url = $(this).data('url');
+                    var load = layer.load(2);
+                    $.get(_url, function (html) {
+                        layer.close(load);
+                        layer.open({
+                            type: 1,
+                            maxmin: true,
+                            area: ['80%', '80%'],
+                            title: "预览日志详情",
+                            content: html
+                        });
+                    });
+                });
+            }
+        });
+        $('#formSearch').submit(function (e) {
+            e.preventDefault();
+            table.draw();;
+        });
+
+
+
+    })
+</script>

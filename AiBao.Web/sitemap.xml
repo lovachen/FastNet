@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap>
+
+  <!--后台-->
+  <siteMapNode Name="系统管理" UID="ADMIN.SYSMGR" IsMenu="1" Target="0" IconClass="fa fa-laptop">
+    <siteMapNode Name="用户列表" UID="ADMIN.SYSMGR.USERS" IsMenu="1" RouteTemplate="/admin/sysmgr/users" Target="0" IconClass="fa fa-circle-o">
+      <siteMapNode Name="预览用户详情" UID="ADMIN.SYSMGR.USERDETAILS" RouteTemplate="/admin/sysmgr/userdetails" Target="0"></siteMapNode>
+      <siteMapNode Name="新增、修改" UID="ADMIN.SYSMGR.USER.EDIT" RouteTemplate="/admin/sysmgr/edituser" Target="0"></siteMapNode>
+      <siteMapNode Name="配置用户角色" UID="ADMIN.SYSMGR.USER.USERROLES" RouteTemplate="/admin/sysmgr/userroles" Target="0"></siteMapNode>
+      <siteMapNode Name="删除用户" UID="ADMIN.SYSMGR.USER.DELETE" RouteTemplate="/admin/sysmgr/deleteuser" Target="0"></siteMapNode>
+
+    </siteMapNode>
+    
+    <siteMapNode Name="角色管理" UID="ADMIN.SYSMGR.ROLES" IsMenu="1" RouteTemplate="/admin/sysmgr/roles" Target="0" IconClass="fa fa-circle-o">
+      <siteMapNode Name="预览角色详情" UID="ADMIN.SYSMGR.ROLES.ROLEUSERS" RouteTemplate="/admin/sysmgr/roleusers" Target="0">
+        <siteMapNode Name="删除关联用户" UID="ADMIN.SYSMGR.ROLES.ROLEUSERS.DEL" RouteTemplate="/admin/sysmgr/deluserrole" Target="0"></siteMapNode>
+      </siteMapNode>
+      <siteMapNode Name="新增、修改" UID="ADMIN.SYSMGR.ROLES.EDIT" RouteTemplate="/admin/sysmgr/editrole" Target="0"></siteMapNode>
+      <siteMapNode Name="配置权限" UID="ADMIN.SYSMGR.ROLES.PRM" RouteTemplate="/admin/sysmgr/roleprm" Target="0"></siteMapNode>
+      <siteMapNode Name="删除角色" UID="ADMIN.SYSMGR.ROLES.DELETE" RouteTemplate="/admin/sysmgr/deleterole" Target="0"></siteMapNode>
+    </siteMapNode>
+
+    <siteMapNode Name="操作日志" UID="ADMIN.SYSMGR.ACTIVITYLOG" IsMenu="1" RouteTemplate="/admin/sysmgr/activitylog" Target="0" IconClass="fa fa-circle-o">
+      <siteMapNode Name="预览日志详情" UID="ADMIN.SYSMGR.ACTIVITYLOG.DTL" RouteTemplate="/admin/sysmgr/activitylogdtl" Target="0"></siteMapNode>
+
+    </siteMapNode>
+    
+    <siteMapNode Name="操作日志业务说明" UID="ADMIN.SYSMGR.ACTIVITYLOGCOMMENT" IsMenu="1" RouteTemplate="/admin/sysmgr/activitylogcomment" Target="0" IconClass="fa fa-circle-o">
+      <siteMapNode Name="初始化操作日志业务说明" UID="ADMIN.SYSMGR.ACTIVITYLOGCOMMENT.INIT" RouteTemplate="/admin/sysmgr/activitylogcommentinit" Target="0"></siteMapNode>
+      <siteMapNode Name="编辑操作日志业务说明" UID="ADMIN.SYSMGR.ACTIVITYLOGCOMMENT.EDIT" RouteTemplate="/admin/sysmgr/editactivitylogcomment" Target="0"></siteMapNode>
+    </siteMapNode>
+
+    <siteMapNode Name="系统参数设置" UID="ADMIN.SYSMGR.SETTING" IsMenu="1" RouteTemplate="/admin/sysmgr/setting" Target="0" IconClass="fa fa-circle-o">
+      <siteMapNode Name="修改系统参数" UID="ADMIN.SYSMGR.SETTING.EDIT" RouteTemplate="/admin/sysmgr/editsetting" Target="0"></siteMapNode>
+    </siteMapNode>
+    <siteMapNode Name="错误日志" UID="ADMIN.SYSMGR.NLOG" IsMenu="1" RouteTemplate="/admin/sysmgr/nlog" Target="0" IconClass="fa fa-circle-o">
+      <siteMapNode Name="查看详情" UID="ADMIN.SYSMGR.NLOG.DTL" RouteTemplate="/admin/sysmgr/nlogdtl" Target="0"></siteMapNode>
+    </siteMapNode>
+
+
+  </siteMapNode>
+  <!--后台结束-->
+
+
+
+</siteMap>

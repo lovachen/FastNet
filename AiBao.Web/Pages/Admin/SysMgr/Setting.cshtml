@@ -1,0 +1,123 @@
+﻿@page
+@model AiBao.Web.Pages.Admin.SysMgr.SettingModel
+@{
+    ViewData["Title"] = "系统参数设置";
+    var canEdit = WorkContext.IsPermit("/admin/sysmgr/editsetting");
+}
+
+<section class="content-header">
+    <h1>
+        系统参数配置
+        <small>系统相关的参数设置</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin/home"><i class="fa fa-dashboard"></i> 主界面</a></li>
+        <li class="active">系统参数配置</li>
+    </ol>
+</section>
+<section class="content">
+
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">基础设置</a></li>
+            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">邮箱参数</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab_1">
+                <div class="box box-solid">
+                    <div class="box-body">
+                        <dl class="dl-horizontal">
+                            <dt>系统名称</dt>
+                            <dd>
+                                <a href="#" class="editable editable-click" data-url="/admin/sysmgr/editsetting" data-title="请输入业务说明" data-type="text" data-pk="SiteName">@Model.SiteSettings.SiteName</a>
+                                <small>(点击修改)</small>
+                            </dd>
+                        </dl>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </div>
+            <!-- /.tab-pane -->
+            <div class="tab-pane" id="tab_2">
+                <div class="box box-solid">
+                    <div class="box-header">
+                        <h3 class="box-title with-border">SMTP发送邮件参数设置</h3>
+                    </div>
+                    <div class="box-body">
+                        <dl class="dl-horizontal">
+                            <dt>主机Host</dt>
+                            <dd>
+                                <a href="#" class="editable editable-click" data-url="/admin/sysmgr/editsetting" data-title="发送邮件主机地址" data-type="text" data-pk="EmailHost">@Model.SiteSettings.EmailHost</a>
+                                <small>(点击修改)</small>
+                            </dd>
+                            <dt>端口Port</dt>
+                            <dd>
+                                <a href="#" class="editable editable-click" data-url="/admin/sysmgr/editsetting" data-title="端口号配置" data-type="text" data-pk="EmailPort">@Model.SiteSettings.EmailPort</a>
+                                <small>(点击修改)</small>
+                            </dd>
+                            <dt>账号</dt>
+                            <dd>
+                                <a href="#" class="editable editable-click" data-url="/admin/sysmgr/editsetting" data-title="发送邮件的账号" data-type="text" data-pk="EmailAccount">@Model.SiteSettings.EmailAccount</a>
+                                <small>(点击修改)</small>
+                            </dd>
+                            <dt>密码</dt>
+                            <dd>
+                                <a href="#" class="editable editable-click" data-url="/admin/sysmgr/editsetting" data-title="发送邮件的密码" data-type="text" data-pk="EmailPassword">@Model.SiteSettings.EmailPassword</a>
+                                <small>(点击修改)</small>
+                            </dd>
+                        </dl>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </div>
+            <!-- /.tab-pane --> 
+            <!-- /.tab-pane -->
+        </div>
+        <!-- /.tab-content -->
+    </div>
+
+
+</section>
+
+<script>
+    $(function () {
+        $.fn.editable.defaults.mode = 'inline';
+        if (@Json.Serialize(canEdit)) {
+            $('.editable').editable({
+                ajaxOptions: {
+                    type: 'get',
+                    dataType: 'json'
+                },
+                success: function (response) {
+                    if (response.Code !== 0) return response.Message;
+                }
+            });
+        }
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

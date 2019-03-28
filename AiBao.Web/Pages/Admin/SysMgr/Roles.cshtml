@@ -1,0 +1,147 @@
+﻿@page
+@model AiBao.Web.Pages.Admin.SysMgr.RolesModel
+@{
+    ViewData["Title"] = "角色列表";
+    var canDtl = WorkContext.IsPermit("/admin/sysmgr/roleusers");
+    var canEdit = WorkContext.IsPermit("/admin/sysmgr/editrole");
+    var canPrm = WorkContext.IsPermit("/admin/sysmgr/roleprm");
+    var canDel = WorkContext.IsPermit("/admin/sysmgr/deleterole");
+}
+
+<section class="content-header">
+    <h1>
+        角色列表
+        <small>用户角色</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin/home"><i class="fa fa-dashboard"></i> 主界面</a></li>
+        <li class="active">角色列表</li>
+    </ol>
+</section>
+<section class="content">
+
+    <div class="box box-solid">
+        <div class="box-body no-padding">
+            <button type="button" data-url="/admin/sysmgr/editrole" class="btn bg-maroon margin btnAdd"><i class="fa fa-plus"></i> 新增</button>
+        </div>
+    </div>
+
+    <div class="box">
+        <div class="box-body">
+            <table id="example1" class="table table-bordered table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th width="20%">角色名称</th>
+                        <th width="30%">描述</th>
+                        <th width="20%">创建时间</th>
+                        <th width="30%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Sys_Roles != null)
+                    {
+                        foreach (var role in Model.Sys_Roles)
+                        {
+                            <tr>
+                                <td>@role.Name</td>
+                                <td>@role.Description</td>
+                                <td>@role.CreationTime</td>
+                                <td>
+                                    @if (canDtl)
+                                    {
+                                        <button data-url="/admin/sysmgr/roleusers?id=@(role.Id)" class="btn btn-link btn-xs btnDetails"><i class="fa fa-search-plus"></i>详情</button>
+                                    }
+                                    @if (canEdit)
+                                    {
+                                        <button data-url="/admin/sysmgr/editrole?id=@(role.Id)" class="btn btn-link btn-xs btnEdit"><i class="fa fa-pencil"></i>编辑</button>
+                                    }
+                                    @if (canPrm)
+                                    {
+                                        <button data-url="/admin/sysmgr/roleprm?id=@(role.Id)" class="btn btn-link btn-xs btnRolePrm"><i class="fa fa-gear"></i>配置权限</button>
+                                    }
+                                    @if (canDel)
+                                    {
+                                        <button data-url="/admin/sysmgr/deleterole?id=@(role.Id)" class="btn btn-xs btn-danger btnDelete"><i class="fa fa-close "></i>删除</button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<script>
+    $(function () {
+        $('.btnAdd,.btnEdit').click(function (e) {
+            e.preventDefault();
+            var _url = $(this).data('url');
+            var load = layer.load(2);
+            $.get(_url, function (html) {
+                layer.close(load);
+                layer.open({
+                    type: 1,
+                    area: ['500px', '400px'],
+                    title: "编辑角色",
+                    content: html
+                });
+            });
+        });
+
+        $('.btnDelete').click(function (e) {
+            e.preventDefault();
+            var _url = $(this).data('url');
+            var _tr = $(this).parents('tr');
+            layer.confirm('删除角色将移除角色所有权限，您确定要删除此角色？', function () {
+                var index = layer.load(2);
+                $.get(_url, function (res) {
+                    layer.close(index);
+                    if (res.Code === 0) {
+                        layer.alert(res.Message, { icon: 1 }, function () {
+                            _tr.remove();
+                            layer.closeAll();
+                        });
+                    } else {
+                        layer.msg(res.Message, { icon: 2 });
+                    }
+                });
+            });
+        });
+
+        $('.btnRolePrm').click(function (e) {
+            e.preventDefault();
+            var _url = $(this).data('url');
+            var load = layer.load(2);
+            $.get(_url, function (html) {
+                layer.close(load);
+                layer.open({
+                    maxmin: true,
+                    type: 1,
+                    area: ['90%', '90%'],
+                    title: "配置角色权限",
+                    content: html
+                });
+            });
+        });
+
+        $('.btnDetails').click(function (e) {
+            e.preventDefault();
+            var _url = $(this).data('url');
+            var load = layer.load(2);
+            $.get(_url, function (html) {
+                layer.close(load);
+                layer.open({
+                    maxmin: true,
+                    type: 1,
+                    area: ['90%', '90%'],
+                    title: "查看详情",
+                    content: html
+                });
+            });
+        });
+
+
+
+    });
+</script>
