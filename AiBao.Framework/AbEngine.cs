@@ -47,7 +47,7 @@ namespace AiBao.Framework
                     opts.Conventions.AddPageRoute("/admin/login", "admin");
                 });
 
-            //services.AddDbContextPool<ABDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDbContextPool<ABDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")),100);
             services.AddDbContext<ABDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             //程序集依赖注入
