@@ -9,7 +9,7 @@
 
 ## 技术介绍
 1、前端技术
-* AdminLTE作为管理框架
+* [AdminLTE](https://adminlte.io/) 后台Web页面模板
 * 数据表格：datatable
 * 对话框：layer
 * 下拉选择框：jQuery Select2
@@ -43,3 +43,13 @@
 * 密码存储：在系统设计上，密码的存储并非明文。而是Md5（密码+Salt）存储，引入密码盐（Salt）使MD5更散列。
 * 登陆实现：登陆时进行两次请求，提一次：通过账号，获取密码盐（Salt）和随机数R，通过jqery.md5插件运算 MD5(MD5（密码+Salt）+R)得到最终提交的密码参数。R记录在数据中，登陆验证时通过数据库记录的用户MD5(存储密码+R）进行匹配。R随机只使用一次，无论登陆成功与否都将清除此R，不可再用.
 * 登陆成功后将一些用户常见的信息写入cookie，为了有可能的开发管理App，所有写入cookie 的配置和写入Jwt的配置进行统一，Jwt的说明 [cts.web.core 类库](https://github.com/lovachen/cts.web.core)实现
+
+### 缓存操作
+     services.AddRedisOrMemoryCache(Configuration); //启用缓存方式
+如未配置Redis缓存则默认启用内存 [cts.web.core 类库](https://github.com/lovachen/cts.web.core) 有缓存实现
+
+### 说说 AddDbContextPool 和 AddDbContext
+AddDbContextPool 和 AddDbContext 都作为将DbContext注入的方式，Pool引入的连接池，性能会更高，但是默认的连接池个数为128，而 SqlConnection默认连接池为100，因此建议将AddDbContextPool连接池设置为100，避免因 SqlConnection连接池耗尽二导致连接错误。
+使用 AddDbContext 则无需担心此问题。
+
+
