@@ -74,7 +74,7 @@ namespace AiBao.Web
             env.ConfigureNLog("nlog.config");
             LogManager.Configuration.Variables["connectionString"] = Configuration.GetConnectionString("DefaultConnection");
 
-            //初始化系统菜单
+            //初始化系统菜单，及参数
             installService.Install();
 
 
