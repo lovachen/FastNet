@@ -30,7 +30,7 @@ namespace AiBao.Web.Pages.Admin.SysMgr
 
 
         public void OnGet()
-        {
+        { 
 
         }
 

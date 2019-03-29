@@ -1,4 +1,5 @@
-﻿using cts.web.core.Model;
+﻿using AiBao.Framework.Filters;
+using cts.web.core.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -8,6 +9,7 @@ using System.Text;
 
 namespace AiBao.Framework.Pages
 {
+    [WebException]
     public abstract class BasePageModel : PageModel
     {
         /// <summary>

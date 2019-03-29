@@ -31,5 +31,10 @@ namespace AiBao.Mapping
         /// 邮件地址
         /// </summary>
         public string EmailPassword { get; set; }
+
+        /// <summary>
+        /// 系统错误时接收邮件地址
+        /// </summary>
+        public string ErrorToMailAddress { get; set; }
     }
 }
