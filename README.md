@@ -9,7 +9,7 @@
 
 ## 技术介绍
 1、前端技术
-* AdminLTE作为管理框架
+* [AdminLTE作为管理框架](https://adminlte.io/)
 * 数据表格：datatable
 * 对话框：layer
 * 下拉选择框：jQuery Select2
