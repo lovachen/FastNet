@@ -37,4 +37,9 @@
 * 菜单 sitemap.xml 文件进行配置，配置的详情说明于 [cts.web.core 类库](https://github.com/lovachen/cts.web.core)实现。通过读取配置文件，生成菜单写入数据库完成初始化
 * 初始化系统参数，系统在启动时可以配置相关的系统参数 
 * 系统默认启用 [NLog](https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-2)作为错入日志记录，并写入数据库而不是文件
-
+### 后台管理入口
+单一的项目分为 前台，后台，Api等，系统启动时显示默认页面（前台首页），通过连接进入后台(https://localhost:44338/admin)。
+数据在生成时默认添加了一个超级管理元账号【admin】密码：abc123
+* 密码存储：在系统设计上，密码的存储并非明文。而是Md5（密码+Salt）存储，引入密码盐（Salt）使MD5更散列。
+* 登陆实现：登陆时进行两次请求，提一次：通过账号，获取密码盐（Salt）和随机数R，通过jqery.md5插件运算 MD5(MD5（密码+Salt）+R)得到最终提交的密码参数。R记录在数据中，登陆验证时通过数据库记录的用户MD5(存储密码+R）进行匹配。R随机只使用一次，无论登陆成功与否都将清除此R，不可再用.
+* 登陆成功后将一些用户常见的信息写入cookie，为了有可能的开发管理App，所有写入cookie 的配置和写入Jwt的配置进行统一，Jwt的说明 [cts.web.core 类库](https://github.com/lovachen/cts.web.core)实现
