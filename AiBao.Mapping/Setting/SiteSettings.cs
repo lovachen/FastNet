@@ -10,7 +10,7 @@ namespace AiBao.Mapping
         /// <summary>
         /// 
         /// </summary>
-        public string SiteName { get; set; } = "报备管理中心";
+        public string SiteName { get; set; } = "AiBao管理中心";
 
         /// <summary>
         /// 邮件发送host
