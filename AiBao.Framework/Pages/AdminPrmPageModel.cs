@@ -19,6 +19,8 @@ namespace AiBao.Framework.Pages
         /// <param name="context"></param>
         public override void OnPageHandlerExecuting(PageHandlerExecutingContext context)
         {
+            base.OnPageHandlerExecuting(context);
+
             if (!WorkContext.IsPermit(context.HttpContext.Request.Path))
             {
                 if (context.HttpContext.Request.IsAjaxRequest())
