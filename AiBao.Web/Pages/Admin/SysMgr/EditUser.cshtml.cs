@@ -6,6 +6,7 @@ using AiBao.Framework.Pages;
 using AiBao.Mapping;
 using AiBao.Services;
 using AutoMapper;
+using cts.web.core.Librs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -58,9 +59,12 @@ namespace AiBao.Web.Pages.Admin.SysMgr
             }
             else
             {
+                item.Account = item.Account.TrimSpace();
                 item.Id = CombGuid.NewGuid();
                 item.CreationTime = DateTime.Now;
                 item.Creator = UserId;
+                item.Salt = EncryptorHelper.CreateSaltKey();
+                item.Password = (EncryptorHelper.GetMD5(item.Account + item.Salt));
                 res = _sysUserService.AddUser(item);
             } 
             AjaxData.Message = res.Message;
