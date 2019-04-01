@@ -63,3 +63,6 @@
 #*.RTF   diff=astextplain
 ################################
 *.css linguist-language= csharp
+*.js linguist-language=csharp
+*.html linguist-language=csharp
+
