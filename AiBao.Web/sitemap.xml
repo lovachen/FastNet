@@ -2,6 +2,15 @@
 <siteMap>
 
   <!--后台-->
+
+  <siteMapNode Name="OSS管理" UID="ADMIN.OSS" IsMenu="1" Target="0" IconClass="fa fa-folder">
+    <siteMapNode Name="Bucket存储桶" UID="ADMIN.OSS.BUCKET" IsMenu="1" RouteTemplate="/admin/oss/bucket" Target="0" IconClass="fa fa-circle-o">
+      <siteMapNode Name="新增、修改" UID="ADMIN.OSS.BUCKET.EDIT" RouteTemplate="/admin/oss/editbucket" Target="0"></siteMapNode>
+      <siteMapNode Name="删除存储桶" UID="ADMIN.OSS.BUCKET.DELETE" RouteTemplate="/admin/oss/deletebucket" Target="0"></siteMapNode>
+    </siteMapNode>
+    
+  </siteMapNode>
+  
   <siteMapNode Name="系统管理" UID="ADMIN.SYSMGR" IsMenu="1" Target="0" IconClass="fa fa-laptop">
     <siteMapNode Name="用户列表" UID="ADMIN.SYSMGR.USERS" IsMenu="1" RouteTemplate="/admin/sysmgr/users" Target="0" IconClass="fa fa-circle-o">
       <siteMapNode Name="预览用户详情" UID="ADMIN.SYSMGR.USERDETAILS" RouteTemplate="/admin/sysmgr/userdetails" Target="0"></siteMapNode>

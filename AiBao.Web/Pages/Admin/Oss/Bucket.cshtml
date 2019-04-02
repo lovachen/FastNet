@@ -1,0 +1,112 @@
+﻿@page
+@model AiBao.Web.Pages.Admin.Oss.BucketModel
+@{
+    ViewData["Title"] = "存储桶管理";
+    var canEdit = WorkContext.IsPermit("/admin/oss/editbucket");
+    var canDel = WorkContext.IsPermit("/admin/oss/deletebucket");
+
+}
+
+<section class="content-header">
+    <h1>
+        存储桶管理
+        <small>文件存储桶</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin/home"><i class="fa fa-dashboard"></i> 主界面</a></li>
+        <li class="active">存储桶管理</li>
+    </ol>
+</section>
+<section class="content">
+
+    <div class="box box-solid">
+        <div class="box-body no-padding">
+            <button type="button" data-url="/admin/oss/editbucket" class="btn bg-maroon margin btnAdd"><i class="fa fa-plus"></i> 新增</button>
+        </div>
+    </div>
+
+    <div class="box">
+        <div class="box-body">
+            <table id="example1" class="table table-bordered table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th width="20%">名称</th>
+                        <th width="30%">描述</th>
+                        <th width="20%">创建时间</th>
+                        <th width="10%">启用压缩</th>
+                        <th width="20%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Buckets != null)
+                    {
+                        foreach (var item in Model.Buckets)
+                        {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td>@item.Description</td>
+                                <td>@item.CreationTime</td>
+                                <td>@item.IsCompress</td>
+                                <td>
+                                    @if (canEdit)
+                                    {
+                                        <button data-url="/admin/oss/editbucket?id=@(item.Id)" class="btn btn-link btn-xs btnEdit"><i class="fa fa-pencil"></i>编辑</button>
+                                    }
+                                    @if (canDel)
+                                    {
+                                        <button data-url="/admin/oss/editbucket?id=@(item.Id)" class="btn btn-xs btn-danger btnDelete"><i class="fa fa-close "></i>删除</button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</section>
+<script>
+    $(function () {
+        $('.btnAdd,.btnEdit').click(function (e) {
+            e.preventDefault();
+            var _url = $(this).data('url');
+            var load = layer.load(2);
+            $.get(_url, function (html) {
+                layer.close(load);
+                layer.open({
+                    type: 1,
+                    area: ['500px', '400px'],
+                    title: "编辑存储桶",
+                    content: html
+                });
+            });
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
