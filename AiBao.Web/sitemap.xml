@@ -8,7 +8,12 @@
       <siteMapNode Name="新增、修改" UID="ADMIN.OSS.BUCKET.EDIT" RouteTemplate="/admin/oss/editbucket" Target="0"></siteMapNode>
       <siteMapNode Name="删除存储桶" UID="ADMIN.OSS.BUCKET.DELETE" RouteTemplate="/admin/oss/deletebucket" Target="0"></siteMapNode>
     </siteMapNode>
-    
+
+    <siteMapNode Name="图片库" UID="ADMIN.OSS.BUCKETIMAGES" IsMenu="1" RouteTemplate="/admin/oss/bucketimage" Target="0" IconClass="fa fa-circle-o">
+      <siteMapNode Name="删除图片" UID="ADMIN.OSS.BUCKETIMAGES.DELETE" RouteTemplate="/admin/oss/deletebucketimage" Target="0"></siteMapNode>
+    </siteMapNode>
+
+
   </siteMapNode>
   
   <siteMapNode Name="系统管理" UID="ADMIN.SYSMGR" IsMenu="1" Target="0" IconClass="fa fa-laptop">

@@ -34,6 +34,7 @@ namespace AiBao.Web.Pages.Admin.SysMgr
 
         }
 
+
         public IActionResult OnGetData()
         {
             var parms = Request.QueryString.ToTableParms();

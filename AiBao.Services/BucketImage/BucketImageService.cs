@@ -1,5 +1,7 @@
 ﻿using AiBao.Entities;
 using AiBao.Mapping;
+using AutoMapper;
+using cts.web.core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +13,12 @@ namespace AiBao.Services
     {
         private readonly static Object lockObj = new object();
         private ABDbContext _dbContext;
+        IMapper _mapper;
 
-        public BucketImageService(ABDbContext dbContext)
+        public BucketImageService(ABDbContext dbContext,
+            IMapper mapper)
         {
+            _mapper = mapper;
             _dbContext = dbContext;
         }
 
@@ -66,7 +71,54 @@ namespace AiBao.Services
         }
 
 
+        public IPagedList<BucketImageMapping> AdminSearch(BucketImageSearchArg arg,DataTablesParameters parameters)
+        {
+            var query = _dbContext.BucketImage.AsQueryable();
 
+            #region 排序
+
+            if (!String.IsNullOrEmpty(parameters.OrderName))
+            {
+                switch (parameters.OrderName)
+                {
+                    case "FileName":
+                        if (parameters.OrderDir.Equals("desc", StringComparison.InvariantCultureIgnoreCase))
+                            query = query.OrderByDescending(o => o.CreationTime);
+                        else
+                            query = query.OrderBy(o => o.FileName);
+                        break;
+                    case "CreationTime":
+                        if (parameters.OrderDir.Equals("desc", StringComparison.InvariantCultureIgnoreCase))
+                            query = query.OrderByDescending(o => o.CreationTime);
+                        else
+                            query = query.OrderBy(o => o.CreationTime);
+                        break;
+                    case "Height":
+                        if (parameters.OrderDir.Equals("desc", StringComparison.InvariantCultureIgnoreCase))
+                            query = query.OrderByDescending(o => o.Height);
+                        else
+                            query = query.OrderBy(o => o.Height);
+                        break;
+                    case "Width":
+                        if (parameters.OrderDir.Equals("desc", StringComparison.InvariantCultureIgnoreCase))
+                            query = query.OrderByDescending(o => o.Width);
+                        else
+                            query = query.OrderBy(o => o.Width);
+                        break;
+                    default:
+                        query = query.OrderBy(o => o.Id);
+                        break;
+                }
+            }
+            else
+            {
+                query = query.OrderBy(o => o.Id);
+            }
+            #endregion
+
+            return PagedList<BucketImageMapping>.Create<Entities.BucketImage>(query, parameters.PageIndex, parameters.Length, _mapper);
+
+        }
 
 
 

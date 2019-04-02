@@ -54,7 +54,7 @@
                                     }
                                     @if (canDel)
                                     {
-                                        <button data-url="/admin/oss/editbucket?id=@(item.Id)" class="btn btn-xs btn-danger btnDelete"><i class="fa fa-close "></i>删除</button>
+                                        <button data-url="/admin/oss/deletebucket?id=@(item.Id)" class="btn btn-xs btn-danger btnDelete"><i class="fa fa-close "></i>删除</button>
                                     }
                                 </td>
                             </tr>
@@ -80,6 +80,26 @@
                     area: ['500px', '400px'],
                     title: "编辑存储桶",
                     content: html
+                });
+            });
+        });
+
+        $('.btnDelete').click(function (e) {
+            e.preventDefault();
+            var _url = $(this).data('url');
+            var _tr = $(this).parents('tr');
+            layer.confirm('删除角色将移除角色所有权限，您确定要删除此角色？', function () {
+                var index = layer.load(2);
+                $.get(_url, function (res) {
+                    layer.close(index);
+                    if (res.Code === 0) {
+                        layer.alert(res.Message, { icon: 1 }, function () {
+                            _tr.remove();
+                            layer.closeAll();
+                        });
+                    } else {
+                        layer.msg(res.Message, { icon: 2 });
+                    }
                 });
             });
         });

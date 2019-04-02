@@ -6,7 +6,7 @@
 <div class="col-sm-12">
     <div class="box-body">
         <form class="form-horizontal" asp-page="EditBucket" method="post" id="formEdit" onsubmit="return false;">
-            <input type="hidden" name="Role.Id" value="@(Model.Bucket!=null?Model.Bucket.Id:Guid.Empty)" />
+            <input type="hidden" name="Bucket.Id" value="@(Model.Bucket!=null?Model.Bucket.Id:Guid.Empty)" />
             <div class="box-body">
                 <div class="form-group">
                     <label for="Role_Name" class="col-sm-3 control-label">名称</label>
