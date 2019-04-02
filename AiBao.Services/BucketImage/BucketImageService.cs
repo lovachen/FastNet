@@ -18,6 +18,21 @@ namespace AiBao.Services
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="visitUrl"></param>
+        /// <returns></returns>
+        public BucketImageMapping GetByVisitUrl(string visitUrl)
+        {
+            return _dbContext.BucketImage.Select(item => new BucketImageMapping()
+            {
+                VisitUrl = item.VisitUrl,
+                IOPath = item.IOPath,
+                ExtName=item.ExtName,
+            }).FirstOrDefault(o => o.VisitUrl == visitUrl);
+        }
+
+        /// <summary>
         /// 通过sha1获取
         /// </summary>
         /// <param name="sha1"></param>
@@ -27,7 +42,7 @@ namespace AiBao.Services
             return _dbContext.BucketImage.Select(item => new
             BucketImageMapping()
             {
-                SHA1 = sha1,
+                SHA1 = item.SHA1,
                 VisitUrl = item.VisitUrl,
                 IOPath = item.IOPath,
             }).FirstOrDefault(o => o.SHA1 == sha1);

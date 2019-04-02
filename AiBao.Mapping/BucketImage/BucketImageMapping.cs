@@ -30,5 +30,6 @@ namespace AiBao.Mapping
         public string SHA1 { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreationTime { get; set; }
+        public string ExtName { get; set; }
     }
 }

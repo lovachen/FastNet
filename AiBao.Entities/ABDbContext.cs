@@ -56,6 +56,8 @@ namespace AiBao.Entities
 
             modelBuilder.Entity<BucketImage>(entity =>
             {
+                entity.HasIndex(e => e.VisitUrl);
+
                 entity.Property(e => e.Id).ValueGeneratedNever();
             });
 

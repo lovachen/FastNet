@@ -13,7 +13,7 @@ namespace AiBao.Entities
         [StringLength(150)]
         public string FileName { get; set; }
         [Required]
-        [StringLength(500)]
+        [StringLength(256)]
         public string VisitUrl { get; set; }
         [Required]
         [StringLength(500)]
@@ -25,5 +25,7 @@ namespace AiBao.Entities
         public string SHA1 { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreationTime { get; set; }
+        [StringLength(10)]
+        public string ExtName { get; set; }
     }
 }

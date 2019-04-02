@@ -118,40 +118,39 @@ namespace AiBao.Web.Areas.Oss.Controllers
                 ApiData.msg = "签名验证失败";
                 return Ok(ApiData);
             }
-            using (Image image = Image.FromStream(file.OpenReadStream()))
-            {
-                string fileName = Guid.NewGuid().ToString();//文件名
-                string visitUrl = $"/{bucket.Name}/{fileName}";
-                Guid id = CombGuid.NewGuid();//entityid
-                                             //存储目录
-                string path = System.IO.Path.Combine(MediaItemConfig.RootDir, bucket.Name, DateTime.Today.ToString("yyyy-MM-dd"), id.ToString());
-                bool compress = false;
-                if (bucket.IsCompress)
-                {
-                    if (file.Length > 1024 * 800)
-                        compress = true;
-                }
-                //保存文件并且获取文件的相对存储路径
-                string iopath = file.CreateImagePathFromStream(_mediaItemStorage, path, compress, 70);
 
-                _bucketImageService.AddImage(new Entities.BucketImage()
-                {
-                    Id = id,
-                    BucketId = bucket.Id,
-                    CreationTime = DateTime.Now,
-                    FileName = file.Name,
-                    IOPath = iopath,
-                    SHA1 = sha1,
-                    VisitUrl = visitUrl,
-                    Width = image.Width,
-                    Height = image.Height
-                });
-                ApiData.code = 0;
-                ApiData.msg = "上传成功";
-                ApiData.data = new { url = $"/oss/imagecn{visitUrl}" };
-                await Task.FromResult(0);
-                return Ok(ApiData);
+            string fileName = Guid.NewGuid().ToString();//文件名
+            string visitUrl = $"/{bucket.Name}/{fileName}";
+            Guid id = CombGuid.NewGuid();//entityid
+                                         //存储目录
+            string path = System.IO.Path.Combine(MediaItemConfig.RootDir, bucket.Name, DateTime.Today.ToString("yyyy-MM-dd"), id.ToString());
+            bool compress = false;
+            if (bucket.IsCompress)
+            {
+                if (file.Length > 1024 * 800)
+                    compress = true;
             }
+            //保存文件并且获取文件的相对存储路径
+            var image = file.CreateImagePathFromStream(_mediaItemStorage, path, compress, 70);
+
+            _bucketImageService.AddImage(new Entities.BucketImage()
+            {
+                Id = id,
+                BucketId = bucket.Id,
+                CreationTime = DateTime.Now,
+                FileName = file.Name,
+                IOPath = image.IOPath,
+                SHA1 = sha1,
+                VisitUrl = visitUrl,
+                Width = image.Width,
+                Height = image.Height,
+                ExtName=image.ExtName
+            });
+            ApiData.code = 0;
+            ApiData.msg = "上传成功";
+            ApiData.data = new { url = $"/oss/imagecn{visitUrl}" };
+            await Task.FromResult(0);
+            return Ok(ApiData);
         }
 
         /// <summary>
@@ -169,6 +168,6 @@ namespace AiBao.Web.Areas.Oss.Controllers
         }
 
 
-         
+
     }
 }

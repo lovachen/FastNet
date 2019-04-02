@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="cts.web.core" Version="1.0.19" />
+    <PackageReference Include="cts.web.core" Version="1.0.20" />
   </ItemGroup>
 
 </Project>
