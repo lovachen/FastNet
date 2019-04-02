@@ -1,5 +1,6 @@
 ﻿using System;
 using cts.web.core;
+using cts.web.core.MediaItem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
@@ -70,6 +71,7 @@ namespace AiBao.Framework
             services.AddSingleton<IWebHelper, WebHelper>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IMailProvide, MailProvide>();
+            services.AddSingleton<IMediaItemStorage, MediaItemStorage>();
             services.AddScoped<SiteWorkContext>();
             services.AddScoped<SysUserAuthentication>();
             services.AddScoped<WorkContext>();

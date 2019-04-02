@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AiBao.Services", "AiBao.Ser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AiBao.Framework", "AiBao.Framework\AiBao.Framework.csproj", "{08EA4D90-10D6-4F6E-9DDE-762E2D431930}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AiBao.Web", "AiBao.Web\AiBao.Web.csproj", "{6E2C321C-85D5-47EE-B81C-243A561CE3AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AiBao.Web", "AiBao.Web\AiBao.Web.csproj", "{6E2C321C-85D5-47EE-B81C-243A561CE3AD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AiBao.Core", "AiBaoCore\AiBao.Core.csproj", "{138D1AB5-9A12-4758-9E2D-CF55584701C9}"
 EndProject

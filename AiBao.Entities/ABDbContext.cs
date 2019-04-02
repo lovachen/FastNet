@@ -15,6 +15,9 @@ namespace AiBao.Entities
         {
         }
 
+        public virtual DbSet<Bucket> Bucket { get; set; }
+        public virtual DbSet<BucketCut> BucketCut { get; set; }
+        public virtual DbSet<BucketImage> BucketImage { get; set; }
         public virtual DbSet<Sys_ActivityLog> Sys_ActivityLog { get; set; }
         public virtual DbSet<Sys_ActivityLogComment> Sys_ActivityLogComment { get; set; }
         public virtual DbSet<Sys_Category> Sys_Category { get; set; }
@@ -33,13 +36,28 @@ namespace AiBao.Entities
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("data source=182.48.115.232,18833;initial catalog=AiBao;user id=fww;password=DY@fww2018;");
+                optionsBuilder.UseSqlServer("data source=127.0.0.1;initial catalog=FastNet;user id=sa;password=123456;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.3-servicing-35854");
+
+            modelBuilder.Entity<Bucket>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+            });
+
+            modelBuilder.Entity<BucketCut>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+            });
+
+            modelBuilder.Entity<BucketImage>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+            });
 
             modelBuilder.Entity<Sys_ActivityLog>(entity =>
             {

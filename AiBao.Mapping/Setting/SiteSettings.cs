@@ -36,5 +36,15 @@ namespace AiBao.Mapping
         /// 系统错误时接收邮件地址
         /// </summary>
         public string ErrorToMailAddress { get; set; }
+
+        /// <summary>
+        /// 文件上传的key
+        /// </summary>
+        public string OSSAccessKeyId { get; set; }
+
+        /// <summary>
+        /// 文件上传的密钥
+        /// </summary>
+        public string OSSAccessKeySecret { get; set; }
     }
 }
