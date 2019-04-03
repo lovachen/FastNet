@@ -36,11 +36,12 @@
             <table id="example1" class="table table-bordered table-striped" style="width:100%">
                 <thead>
                     <tr>
-                        <th width="10%">账号</th>
-                        <th width="10%">姓名</th>
-                        <th width="10%">手机</th>
-                        <th>创建时间</th>
-                        <th>最新活动时间</th>
+                        <th width="20%">图片</th>
+                        <th width="15%">文件名</th>
+                        <th width="10%">扩展名</th>
+                        <th width="10%">长</th>
+                        <th width="10%">宽</th>
+                        <th width="20%">创建时间</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -79,20 +80,30 @@
                 }
             },
             columns: [
-                { data: 'Account' },
-                { data: 'Name' },
-                { data: 'MobilePhone' },
+                {
+                    "width": '15%',
+                    "data": null,
+                    render: function (data, type, row) {
+                        console.log(row);
+                        var html = '<img src="/oss/imagecn'+row.VisitUrl+'!m_fill,w_80xh_60" alt="" />';
+                        return html;
+                    }
+                },
+                { data: 'FileName' },
+                { data: 'ExtName' },
+                { data: 'Width' },
+                { data: 'Height' },
                 { data: 'CreationTime' },
-                { data: 'LastActivityTime' },
             ],
-            columnDefs: [{ "width": '15%', "targets": [0] },
+            columnDefs: [
             {
-                "targets": 5,//操作按钮目标列
+                "targets": 6,//操作按钮目标列
                 "data": null,
                 "render": function (data, type, row) {
                     var id = row.Id;
+                    var html = '';
                     if (@Json.Serialize(canDel)) {
-                        html += "<button data-url='/admin/sysmgr/deleteuser?id=" + id + "' class='btn btn-danger btn-xs btnDelete'><i class='fa fa-times'></i> 删除</button>";
+                       // html += "<button data-url='/admin/sysmgr/deleteuser?id=" + id + "' class='btn btn-danger btn-xs btnDelete'><i class='fa fa-times'></i> 删除</button>";
                     }
                     return html;
                 }
@@ -102,7 +113,6 @@
                 $(row).find('.btnDelete').click(function (e) {
                     e.preventDefault();
                     var _url = $(this).data('url');
-                    events.del(_url, row);
                 });
 
             }
