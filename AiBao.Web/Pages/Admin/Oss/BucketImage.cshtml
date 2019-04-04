@@ -25,7 +25,6 @@
     <div class="box box-info">
         <div class="box-body">
             <form class="form-inline" onsubmit="return false" id="formSearch">
-                 
                 <button type="submit" class="btn bg-purple"><i class="fa fa-search"></i> 查询</button>
             </form>
         </div>
@@ -84,8 +83,7 @@
                     "width": '15%',
                     "data": null,
                     render: function (data, type, row) {
-                        console.log(row);
-                        var html = '<img src="/oss/imagecn'+row.VisitUrl+'!m_fill,w_80xh_60" alt="" />';
+                        var html = '<img src="/oss/imagecn'+row.VisitUrl+'!m_fill,w_80xh_60" data-url="/oss/imagecn'+row.VisitUrl+'" alt="" />';
                         return html;
                     }
                 },
@@ -109,12 +107,21 @@
                 }
             }],
             "rowCallback": function (row, data) {
-                 
                 $(row).find('.btnDelete').click(function (e) {
                     e.preventDefault();
                     var _url = $(this).data('url');
                 });
-
+                $(row).find('img').click(function (e) {
+                     var _url = $(this).data('url');
+                    e.preventDefault();
+                    layer.open({
+                      type: 1,
+                        title: '',
+                      area:['90%','90%'],
+                        shadeClose: true,
+                        content: '<img src="' + _url + '" />'
+                    });
+                });
             }
         });
         $('#formSearch').submit(function (e) {
@@ -122,7 +129,7 @@
             table.draw();;
         });
 
-         
-         
+
+
     })
 </script>
