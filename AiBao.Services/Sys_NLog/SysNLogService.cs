@@ -44,7 +44,7 @@ namespace AiBao.Services
                         else
                             query = query.OrderBy(o => o.Level);
                         break;
-                    case "LoggedForamt":
+                    case "LoggedFormat":
                         if (parameters.OrderDir.Equals("desc", StringComparison.InvariantCultureIgnoreCase))
                             query = query.OrderByDescending(o => o.Logged);
                         else

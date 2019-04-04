@@ -8,6 +8,7 @@ using cts.web.core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -64,10 +65,12 @@ namespace AiBao.Web
                 app.UseHsts();
             }
 
+            //¶¯Ì¬Ñ¹ËõÄÚÈÝ
+            app.UseResponseCompression();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
-
+            app.UseCookiePolicy(); 
             app.UseMvc();
 
             //NLog

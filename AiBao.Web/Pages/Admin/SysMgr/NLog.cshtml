@@ -70,11 +70,12 @@
                     d.q = $('#level').val();
                 }
             },
+            order:[1,'desc'],
             columns: [
-                { "width": '10%', data: "Level" },
+                { "width": '10%', data: "Level", "orderable": false },
                 { "width": '25%', data: "LoggedFormat"},
                 { "width": '30%', data: "Message", "orderable": false  },
-                { "width": '25%', data: "Logger" }
+                { "width": '25%', data: "Logger", "orderable": false }
             ],
             columnDefs: [
                 {

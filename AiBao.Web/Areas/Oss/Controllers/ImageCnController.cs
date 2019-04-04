@@ -16,6 +16,7 @@ namespace AiBao.Web.Areas.Oss.Controllers
     /// <summary>
     /// 
     /// </summary>
+    [ResponseCache(VaryByHeader = "Accept-Encoding", Location = ResponseCacheLocation.Any, Duration = 86400)]
     public class ImageCnController : AreaOssController
     {
         BucketImageService _bucketImageService;
@@ -130,7 +131,7 @@ namespace AiBao.Web.Areas.Oss.Controllers
                         h = arr[i].Replace("h_", "");
                         int.TryParse(h, out height);
                     }
-                } 
+                }
             }
             else if (resize.StartsWith("h_"))
             {

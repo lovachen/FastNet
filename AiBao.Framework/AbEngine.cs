@@ -19,6 +19,7 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using AiBao.Framework.Security;
+using Microsoft.AspNetCore.Builder;
 
 namespace AiBao.Framework
 {
@@ -109,6 +110,9 @@ namespace AiBao.Framework
                     opts.Cookie.HttpOnly = true;
                     opts.LoginPath = "/admin";
                 });
+            //
+            services.AddResponseCompression();
+            services.AddResponseCaching();
         }
     }
 }

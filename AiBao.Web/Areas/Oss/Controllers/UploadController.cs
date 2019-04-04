@@ -14,9 +14,7 @@ using cts.web.core.MediaItem;
 using System.DrawingCore;
 
 namespace AiBao.Web.Areas.Oss.Controllers
-{
-    [Produces("application/json")]
-    [Consumes("application/json", "multipart/form-data")]
+{ 
     public class UploadController : AreaOssController
     {
         SettingService _settingService;
