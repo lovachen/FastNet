@@ -10,6 +10,7 @@ using AiBao.Services;
 using cts.web.core.Librs;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using SkiaSharp;
 
 namespace AiBao.Web.Areas.Oss.Controllers
 {
@@ -173,10 +174,7 @@ namespace AiBao.Web.Areas.Oss.Controllers
         }
 
         #endregion
-
-
-
-
+        
 
 
 
