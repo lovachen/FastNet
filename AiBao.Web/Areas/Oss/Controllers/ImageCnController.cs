@@ -77,7 +77,7 @@ namespace AiBao.Web.Areas.Oss.Controllers
             if (!System.IO.File.Exists(abPath))
                 return NotFound();
 
-            using (var img = SkiaSharpHelper.MakeThumb(abPath,cut,resize))
+            using (var img = SkiaHelper.MakeThumb(abPath,cut,resize))
             {
                 var dd = SKImage.FromBitmap(img).Encode(SKEncodedImageFormat.Jpeg, 75);
                 return File(dd.ToArray(), $"image/{item.ExtName?.Substring(1)}");
@@ -85,7 +85,15 @@ namespace AiBao.Web.Areas.Oss.Controllers
         }
 
 
+        [HttpGet("captcha")]
+        public IActionResult Captcha()
+        {
+            var bytes = SkiaCaptcha.GetCaptcha("hello world");
 
+
+            return File(bytes, "image/png");
+
+        }
 
 
     }

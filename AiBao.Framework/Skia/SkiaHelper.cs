@@ -8,7 +8,7 @@ namespace AiBao.Framework.Skia
     /// <summary>
     /// SkiaSharp 工具类
     /// </summary>
-    public class SkiaSharpHelper
+    public class SkiaHelper
     {
         private const int QUALITY = 75;
 
@@ -167,5 +167,44 @@ namespace AiBao.Framework.Skia
         {
             return new ResolveArg(cut, resize);
         }
+
+        /// <summary>
+        /// 测量文字 获取矩形
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="fontName"></param>
+        /// <param name="fontSize"></param>
+        /// <param name="fontStyle"></param>
+        /// <returns></returns>
+        public static SKRect MeasureText(string text, string fontName, float fontSize, SKFontStyle fontStyle)
+        {
+            SKRect rect = new SKRect();
+
+            using (SKTypeface font = SKTypeface.FromFamilyName(fontName, fontStyle))
+            {
+                using (SKPaint paint = new SKPaint())
+                {
+                    paint.IsAntialias = true;
+                    paint.Typeface = font;
+                    paint.TextSize = fontSize;
+                    paint.MeasureText(text, ref rect);
+                }
+            }
+            return rect;
+        }
+
+        /// <summary>
+        ///  测量文字 获取矩形
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="paint"></param>
+        /// <returns></returns>
+        internal static SKRect MeasureText(string text, SKPaint paint)
+        {
+            SKRect rect = new SKRect();
+            paint.MeasureText(text, ref rect);
+            return rect;
+        }  
+
     }
 }
