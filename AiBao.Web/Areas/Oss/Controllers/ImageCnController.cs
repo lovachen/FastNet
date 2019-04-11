@@ -17,7 +17,7 @@ namespace AiBao.Web.Areas.Oss.Controllers
     /// <summary>
     /// 
     /// </summary>
-    [ResponseCache(VaryByHeader = "Accept-Encoding", Location = ResponseCacheLocation.Any, Duration = 86400)]
+    //[ResponseCache(VaryByHeader = "Accept-Encoding", Location = ResponseCacheLocation.Any, Duration = 86400)]
     public class ImageCnController : AreaOssController
     {
         BucketImageService _bucketImageService;
@@ -30,6 +30,12 @@ namespace AiBao.Web.Areas.Oss.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
 
+        /// <summary>
+        /// 查看原图
+        /// </summary>
+        /// <param name="bucket"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [Route("{bucket}/{name}")]
         public IActionResult Get(string bucket, string name)
         {
@@ -42,12 +48,16 @@ namespace AiBao.Web.Areas.Oss.Controllers
             if (!System.IO.File.Exists(abPath))
                 return NotFound();
 
-            using (FileStream fs = new FileStream(abPath, FileMode.Open))
+            using (var img = MakeThumb(abPath, 400, 400))
             {
-                byte[] bt = new byte[fs.Length];
-                fs.Read(bt, 0, bt.Length);
-                return File(bt, $"image/{item.ExtName?.Substring(1)}");
+                return File(img.ToArray(), "image/png");
             }
+            //using (FileStream fs = new FileStream(abPath, FileMode.Open))
+            //{
+            //    byte[] bt = new byte[fs.Length];
+            //    fs.Read(bt, 0, bt.Length);
+            //    return File(bt, $"image/{item.ExtName?.Substring(1)}");
+            //}
         }
 
         /// <summary>
@@ -174,9 +184,78 @@ namespace AiBao.Web.Areas.Oss.Controllers
         }
 
         #endregion
-        
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="abPath"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        private SKData MakeThumb(string abPath, int width, int height)
+        {
+            using (var input = System.IO.File.OpenRead(abPath))
+            {
+                using (var inputStream = new SKManagedStream(input))
+                {
+                    using (var bitmap = SKBitmap.Decode(inputStream))
+                    {
+                        SKRect bitmapRect = new SKRect(0, 0, bitmap.Width, bitmap.Height);
+                        SKRect cropRect = new CroppingRectangle(bitmapRect, width, height).Rect;
+
+                        SKBitmap croppedBitmap = new SKBitmap(width, height);
+                        SKRect dest = new SKRect(0, 0, width, height);
+                        SKRect source = new SKRect(cropRect.Left, cropRect.Top,
+                                                   cropRect.Right, cropRect.Bottom);
+
+                        using (SKCanvas canvas = new SKCanvas(croppedBitmap))
+                        {
+                            canvas.DrawBitmap(bitmap, source, dest);
+                        }
+                        return SKImage.FromBitmap(croppedBitmap).Encode(SKEncodedImageFormat.Jpeg, 75);
+                    }
+                }
+            }
+        }
 
     }
+
+    internal class CroppingRectangle
+    {
+        SKRect maxRect;
+        public CroppingRectangle(SKRect maxRect, int width, int height)
+        {
+            this.maxRect = maxRect;
+
+            //
+            Rect = new SKRect(maxRect.Left, maxRect.Top, maxRect.Right, maxRect.Bottom);
+            SKRect rect = Rect;
+            float oRight = rect.Right, oBottom = rect.Bottom, toRight = width, toBottom = height;
+            //纵向比计算
+            if (oRight / oBottom > width / height)
+            {
+                rect.Top = 0;
+                float w = rect.Bottom * width / height;
+                rect.Left = (rect.Width - w) / 2;
+                rect.Right = rect.Left + w;
+            }
+            else
+            {
+                rect.Left = 0;
+                float h = rect.Right * width / height;
+                rect.Top = (rect.Bottom - h) / 2;
+                rect.Bottom = rect.Top + h;
+            }
+            Rect = rect;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public SKRect Rect { set; get; }
+    }
+
+
+
 }
