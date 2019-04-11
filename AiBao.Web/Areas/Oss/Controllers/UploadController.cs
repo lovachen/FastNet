@@ -41,7 +41,7 @@ namespace AiBao.Web.Areas.Oss.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        // oss/v1/upload/signature
+        // oss/upload/signature
         [Route("signature")]
         [HttpPost]
         public IActionResult Signature([FromBody]SignatureModel model)
@@ -75,6 +75,7 @@ namespace AiBao.Web.Areas.Oss.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
+        //POST /oss/upload/image
         [HttpPost("image")]
         public async Task<IActionResult> UpImage([FromForm]UploadModel model)
         {
