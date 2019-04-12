@@ -18,7 +18,7 @@ namespace AiBao.Web.Areas.Oss.Controllers
     /// <summary>
     /// 
     /// </summary>
-    //[ResponseCache(VaryByHeader = "Accept-Encoding", Location = ResponseCacheLocation.Any, Duration = 86400)]
+    [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 86400)]
     public class ImageCnController : AreaOssController
     {
         BucketImageService _bucketImageService;
@@ -77,24 +77,13 @@ namespace AiBao.Web.Areas.Oss.Controllers
             if (!System.IO.File.Exists(abPath))
                 return NotFound();
 
-            using (var img = SkiaHelper.MakeThumb(abPath,cut,resize))
+            using (var img = SkiaHelper.MakeThumb(abPath,cut,resize,item.ExtName))
             {
-                var dd = SKImage.FromBitmap(img).Encode(SKEncodedImageFormat.Jpeg, 75);
-                return File(dd.ToArray(), $"image/{item.ExtName?.Substring(1)}");
+                return File(img.ToArray(), $"image/{item.ExtName?.Substring(1)}");
             }
         }
 
-
-        [HttpGet("captcha")]
-        public IActionResult Captcha()
-        {
-            var bytes = SkiaCaptcha.GetCaptcha("hello world");
-
-
-            return File(bytes, "image/png");
-
-        }
-
+         
 
     }
 
