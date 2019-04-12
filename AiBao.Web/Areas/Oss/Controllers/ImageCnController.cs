@@ -23,7 +23,7 @@ namespace AiBao.Web.Areas.Oss.Controllers
     {
         BucketImageService _bucketImageService;
         IHostingEnvironment _hostingEnvironment;
-        private SettingService _settingService;
+        SettingService _settingService;
 
         public ImageCnController(BucketImageService bucketImageService,
             IHostingEnvironment hostingEnvironment,
