@@ -88,7 +88,7 @@ namespace AiBao.Services.Setting
         {
             return _cacheManager.Get<byte[]>(IMG_404, () =>
             {
-                string path = Path.Combine(_env.ContentRootPath, FILE_NAME_404);
+                string path = Path.Combine(_env.WebRootPath, FILE_NAME_404);
                 if (File.Exists(path))
                 {
                     using (var stream = File.OpenRead(path))
@@ -112,7 +112,7 @@ namespace AiBao.Services.Setting
             {
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    using (var fs = File.OpenWrite(Path.Combine(_env.ContentRootPath, FILE_NAME_404)))
+                    using (var fs = File.OpenWrite(Path.Combine(_env.WebRootPath, FILE_NAME_404)))
                     {
                         stream.CopyTo(ms);
                         ms.WriteTo(fs);

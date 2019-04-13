@@ -47,11 +47,13 @@ namespace AiBao.Web.Areas.Oss.Controllers
             string visitUrl = $"/{bucket}/{name}";
 
             var item = _bucketImageService.GetByVisitUrl(visitUrl);
-            if (item == null) return NotFound();
+            if (item == null) return NotFile();
 
             string abPath = Path.Combine(_hostingEnvironment.ContentRootPath, item.IOPath);
             if (!System.IO.File.Exists(abPath))
-                return NotFound();
+            {
+                return NotFile();
+            }
 
             using (FileStream fs = new FileStream(abPath, FileMode.Open))
             {
@@ -73,11 +75,11 @@ namespace AiBao.Web.Areas.Oss.Controllers
         {
             string visitUrl = $"/{bucket}/{name}";
             var item = _bucketImageService.GetByVisitUrl(visitUrl);
-            if (item == null) return NotFound();
+            if (item == null) return NotFile();
 
             string abPath = Path.Combine(_hostingEnvironment.ContentRootPath, item.IOPath);
             if (!System.IO.File.Exists(abPath))
-                return NotFound();
+                return NotFile();
 
             string cut = null, resize = null;
             Stream stream = null;
@@ -105,7 +107,17 @@ namespace AiBao.Web.Areas.Oss.Controllers
             }
         }
 
-
+        /// <summary>
+        /// 没有文件时返回
+        /// </summary>
+        /// <returns></returns>
+        private IActionResult NotFile()
+        {
+            var bt = _markLogoService.Get404Stream();
+            if (bt == null)
+                return NotFound();
+            return File(bt, "image/png");
+        }
     }
 
 
