@@ -77,10 +77,9 @@ namespace AiBao.Web.Areas.Oss.Controllers
             if (!System.IO.File.Exists(abPath))
                 return NotFound();
 
-            using (var img = SkiaHelper.MakeThumb(abPath,cut,resize))
+            using (var img = SkiaHelper.MakeThumb(abPath,cut,resize, item.ExtName))
             {
-                var dd = SKImage.FromBitmap(img).Encode(SKEncodedImageFormat.Jpeg, 75);
-                return File(dd.ToArray(), $"image/{item.ExtName?.Substring(1)}");
+                return File(img.ToArray(), $"image/{item.ExtName?.Substring(1)}");
             }
         }
 
