@@ -46,6 +46,7 @@
 
     <siteMapNode Name="系统参数设置" UID="ADMIN.SYSMGR.SETTING" IsMenu="1" RouteTemplate="/admin/sysmgr/setting" Target="0" IconClass="fa fa-circle-o">
       <siteMapNode Name="修改系统参数" UID="ADMIN.SYSMGR.SETTING.EDIT" RouteTemplate="/admin/sysmgr/editsetting" Target="0"></siteMapNode>
+      <siteMapNode Name="水印设置" UID="ADMIN.SYSMGR.SETTING.MARKSETTING" RouteTemplate="/admin/sysmgr/markSetting" Target="0"></siteMapNode>
     </siteMapNode>
     <siteMapNode Name="错误日志" UID="ADMIN.SYSMGR.NLOG" IsMenu="1" RouteTemplate="/admin/sysmgr/nlog" Target="0" IconClass="fa fa-circle-o">
       <siteMapNode Name="查看详情" UID="ADMIN.SYSMGR.NLOG.DTL" RouteTemplate="/admin/sysmgr/nlogdtl" Target="0"></siteMapNode>

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AiBao.Core.MediaItem;
 using AiBao.Framework.Skia;
 using AiBao.Services;
+using AiBao.Services.Setting;
 using cts.web.core.Librs;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -23,13 +24,13 @@ namespace AiBao.Web.Areas.Oss.Controllers
     {
         BucketImageService _bucketImageService;
         IHostingEnvironment _hostingEnvironment;
-        SettingService _settingService;
+        MarkLogoService _markLogoService;
 
         public ImageCnController(BucketImageService bucketImageService,
-            IHostingEnvironment hostingEnvironment,
-            SettingService settingService)
+            MarkLogoService markLogoService,
+            IHostingEnvironment hostingEnvironment)
         {
-            _settingService = settingService;
+            _markLogoService = markLogoService;
             _bucketImageService = bucketImageService;
             _hostingEnvironment = hostingEnvironment;
         }
@@ -61,13 +62,14 @@ namespace AiBao.Web.Areas.Oss.Controllers
         }
 
         /// <summary>
-        /// 不剪裁+水印
+        /// 剪裁、水印
         /// </summary>
         /// <param name="bucket"></param>
         /// <param name="name"></param>
+        /// <param name="query">参数，以'逗号分隔',例如:m_fill,w_200xh_300,l_logo</param>
         /// <returns></returns>
-        [Route("{bucket}/{name}/l_logo")]
-        public IActionResult GetAppendMark(string bucket, string name, string l_logo)
+        [Route("{bucket}/{name}!{query}")]
+        public IActionResult GetAppendMark(string bucket, string name, string query)
         {
             string visitUrl = $"/{bucket}/{name}";
             var item = _bucketImageService.GetByVisitUrl(visitUrl);
@@ -77,64 +79,32 @@ namespace AiBao.Web.Areas.Oss.Controllers
             if (!System.IO.File.Exists(abPath))
                 return NotFound();
 
-            string marPaht = Path.Combine(_hostingEnvironment.ContentRootPath, _settingService.GetMasterSettings().MarkPath);
-            using (var img = SkiaHelper.MakeThumb(abPath, null, null, item.ExtName, marPaht))
+            string cut = null, resize = null;
+            Stream stream = null;
+
+            if (!String.IsNullOrEmpty(query))
+            {
+                var arr = query.Split(',');
+                foreach (var q in arr)
+                {
+                    string temp = q.ToLower();
+                    if (temp.StartsWith("m_"))
+                        cut = temp;
+                    if (temp.StartsWith("w_") || temp.StartsWith("h_"))
+                        resize = temp;
+                    if (temp.Equals("l_logo"))
+                    {
+                        stream = _markLogoService.GetStream();
+                    }
+                }
+            }
+
+            using (var img = SkiaHelper.MakeThumb(abPath, cut, resize, item.ExtName, stream))
             {
                 return File(img.ToArray(), $"image/{item.ExtName?.Substring(1)}");
             }
         }
 
-        /// <summary>
-        /// 剪裁无水印
-        /// </summary>
-        /// <param name="bucket"></param>
-        /// <param name="name"></param>
-        /// <param name="cut">剪裁方式。m_fill,m_w,m_h</param>
-        /// <param name="resize">剪裁大小，w_100,h_100,w_100xh_100</param>
-        /// <param name="l_logo"></param>
-        /// <returns></returns>
-        [Route("{bucket}/{name}!{cut},{resize}")]
-        public IActionResult GetCut(string bucket, string name, string cut, string resize)
-        {
-            string visitUrl = $"/{bucket}/{name}";
-            var item = _bucketImageService.GetByVisitUrl(visitUrl);
-            if (item == null) return NotFound();
-
-            string abPath = Path.Combine(_hostingEnvironment.ContentRootPath, item.IOPath);
-            if (!System.IO.File.Exists(abPath))
-                return NotFound();
-
-            using (var img = SkiaHelper.MakeThumb(abPath, cut, resize, item.ExtName, null))
-            {
-                return File(img.ToArray(), $"image/{item.ExtName?.Substring(1)}");
-            }
-        }
-
-        /// <summary>
-        /// 剪裁+水印
-        /// </summary>
-        /// <param name="bucket"></param>
-        /// <param name="name"></param>
-        /// <param name="cut"></param>
-        /// <param name="resize"></param>
-        /// <param name="l_logo"></param>
-        /// <returns></returns>
-        [Route("{bucket}/{name}!{cut},{resize}/l_logo")]
-        public IActionResult GetCutAppendMark(string bucket, string name, string cut, string resize)
-        {
-            string visitUrl = $"/{bucket}/{name}";
-            var item = _bucketImageService.GetByVisitUrl(visitUrl);
-            if (item == null) return NotFound();
-
-            string abPath = Path.Combine(_hostingEnvironment.ContentRootPath, item.IOPath);
-            if (!System.IO.File.Exists(abPath))
-                return NotFound();
-            string marPaht = Path.Combine(_hostingEnvironment.ContentRootPath, _settingService.GetMasterSettings().MarkPath);
-            using (var img = SkiaHelper.MakeThumb(abPath, cut, resize, item.ExtName, marPaht))
-            {
-                return File(img.ToArray(), $"image/{item.ExtName?.Substring(1)}");
-            }
-        }
 
     }
 

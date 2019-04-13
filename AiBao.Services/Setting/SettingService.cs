@@ -10,6 +10,7 @@ using AiBao.Entities;
 using cts.web.core;
 using AiBao.Mapping;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace AiBao.Services
 {
@@ -41,7 +42,6 @@ namespace AiBao.Services
             });
             return dic;
         }
-
 
         /// <summary>
         /// 保存基数设置的值

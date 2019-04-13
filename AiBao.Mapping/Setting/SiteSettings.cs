@@ -45,10 +45,5 @@ namespace AiBao.Mapping
         /// 文件上传的密钥
         /// </summary>
         public string OSSAccessKeySecret { get; set; }
-
-        /// <summary>
-        /// 水印图片相对地址
-        /// </summary>
-        public string MarkPath { get; set; } = "mark_logo.png";
     }
 }

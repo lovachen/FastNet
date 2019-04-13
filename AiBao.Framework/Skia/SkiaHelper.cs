@@ -56,6 +56,47 @@ namespace AiBao.Framework.Skia
         /// <summary>
         /// 创建缩略图，并且格式化
         /// </summary>
+        /// <param name="abPath"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="mode"></param>
+        /// <param name="format"></param>
+        /// <param name="stream">水印流</param>
+        /// <returns></returns>
+        public static SKData MakeThumb(string abPath, int width, int height, CroppingMode mode, SKEncodedImageFormat format, Stream stream)
+        {
+            using (var input = File.OpenRead(abPath))
+            {
+                SKBitmap bitmap = null;
+                SKCanvas canvas = null;
+                if (mode == CroppingMode.NONE)
+                {
+                    bitmap = SKBitmap.Decode(input);
+                    canvas = new SKCanvas(bitmap);
+                }
+                else
+                {
+                    var source = SKBitmap.Decode(input);
+                    var cropRect = new CroppingRectangle(source, width, height, mode);
+                    bitmap = new SKBitmap((int)cropRect.Dest.Width, (int)cropRect.Dest.Height);
+                    canvas = new SKCanvas(bitmap);
+                    canvas.DrawBitmap(source, cropRect.Rect, cropRect.Dest);
+                }
+                if (stream != null)
+                {
+                    DrawMark(canvas, bitmap.Width, bitmap.Height, stream);
+                }
+                SKData data = SKImage.FromBitmap(bitmap).Encode(format, QUALITY);
+                canvas.Dispose();
+                bitmap.Dispose();
+                return data;
+            }
+        }
+         
+
+        /// <summary>
+        /// 创建缩略图，并且格式化
+        /// </summary>
         /// <param name="abPath">图片绝对路径</param>
         /// <param name="cut">指定的剪裁方式</param>
         /// <param name="resize">指定的剪裁大小</param>
@@ -74,6 +115,22 @@ namespace AiBao.Framework.Skia
         /// <param name="abPath">图片绝对路径</param>
         /// <param name="cut">指定的剪裁方式</param>
         /// <param name="resize">指定的剪裁大小</param>
+        /// <param name="format">格式</param>
+        /// <param name="logoPath">水印流</param>
+        /// <returns></returns>
+        public static SKData MakeThumb(string abPath, string cut, string resize, SKEncodedImageFormat format, Stream stream)
+        {
+            var resolve = GetResolve(cut, resize);
+            return MakeThumb(abPath, resolve.Width, resolve.Height, resolve.Mode, format, stream);
+        }
+
+
+        /// <summary>
+        /// 创建缩略图，并且格式化
+        /// </summary>
+        /// <param name="abPath">图片绝对路径</param>
+        /// <param name="cut">指定的剪裁方式</param>
+        /// <param name="resize">指定的剪裁大小</param>
         /// <param name="extName">文件扩展名</param>
         /// <param name="logoPath">水印地址，不为空时添加水印</param>
         /// <returns></returns>
@@ -81,6 +138,21 @@ namespace AiBao.Framework.Skia
         {
             var resolve = GetResolve(cut, resize);
             return MakeThumb(abPath, resolve.Width, resolve.Height, resolve.Mode, GetImageFormat(extName), logoPath);
+        }
+
+        /// <summary>
+        /// 创建缩略图，并且格式化
+        /// </summary>
+        /// <param name="abPath">图片绝对路径</param>
+        /// <param name="cut">指定的剪裁方式</param>
+        /// <param name="resize">指定的剪裁大小</param>
+        /// <param name="extName">文件扩展名</param>
+        /// <param name="logoPath">水印</param>
+        /// <returns></returns>
+        public static SKData MakeThumb(string abPath, string cut, string resize, string extName, Stream stream )
+        {
+            var resolve = GetResolve(cut, resize);
+            return MakeThumb(abPath, resolve.Width, resolve.Height, resolve.Mode, GetImageFormat(extName), stream);
         }
 
         /// <summary>
@@ -214,6 +286,8 @@ namespace AiBao.Framework.Skia
             return rect;
         }
 
+        #region 添加水印
+
         /// <summary>
         /// 添加水印
         /// </summary>
@@ -234,9 +308,9 @@ namespace AiBao.Framework.Skia
                         canvas.RotateDegrees(-20, width / 2, height / 2);
                         for (int i = -2; i < x; i++)
                         {
-                            for (int k = -3; k < y; k++)
+                            for (int k = -2; k < y; k++)
                             {
-                                canvas.DrawBitmap(bitMap, new SKPoint(bitMap.Width * i * 2f, bitMap.Height * k * 2f));
+                                canvas.DrawBitmap(bitMap, new SKPoint(bitMap.Width * i * 1.8f, bitMap.Height * k * 2f));
                             }
                         }
                     }
@@ -244,8 +318,35 @@ namespace AiBao.Framework.Skia
             }
         }
 
+        /// <summary>
+        /// 添加水印
+        /// </summary>
+        /// <param name="canvas"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="stream"></param>
+        internal static void DrawMark(SKCanvas canvas, int width, int height, Stream stream)
+        {
+            if (stream != null)
+            {
+                using (var bitMap = SKBitmap.Decode(stream))
+                {
+                    int x = width / bitMap.Width + 2;
+                    int y = height / bitMap.Height + 2;
+                    canvas.RotateDegrees(-20, width / 2, height / 2);
+                    for (int i = -2; i < x; i++)
+                    {
+                        for (int k = -2; k < y; k++)
+                        {
+                            canvas.DrawBitmap(bitMap, new SKPoint(bitMap.Width * i * 1.8f, bitMap.Height * k * 2f));
+                        }
+                    }
+                    stream.Dispose();
+                }
+            }
+        }
 
-
+        #endregion
 
     }
 }

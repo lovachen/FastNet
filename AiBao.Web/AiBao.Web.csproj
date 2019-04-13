@@ -17,6 +17,11 @@
     <None Remove="MediaItems\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\img_404_orrer.png" />
+    <None Include="wwwroot\mark_logo.png" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />

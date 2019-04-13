@@ -26,8 +26,8 @@ namespace AiBao.Framework.Skia
                     SKRect maxRect = new SKRect(0, 0, shourceBitmap.Width, shourceBitmap.Height);
 
                     float oRight = maxRect.Right, oBottom = maxRect.Bottom;
-                    //纵向比计算
-                    if (oRight / oBottom > width / height)
+                    //纵向比计算 
+                    if (oRight / oBottom > (float)width / height)
                     {
                         rect.Top = 0;
                         float w = rect.Bottom * width / height;
@@ -37,7 +37,7 @@ namespace AiBao.Framework.Skia
                     else
                     {
                         rect.Left = 0;
-                        float h = rect.Right * width / height;
+                        float h = rect.Right * height / width;
                         rect.Top = (rect.Bottom - h) / 2;
                         rect.Bottom = rect.Top + h;
                     }

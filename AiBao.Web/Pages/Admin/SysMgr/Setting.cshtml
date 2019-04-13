@@ -21,6 +21,7 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">基础设置</a></li>
             <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">邮箱参数</a></li>
+            <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">水印设置</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="tab_1">
@@ -85,6 +86,61 @@
                     <!-- /.box-body -->
                 </div>
             </div>
+
+            <div class="tab-pane" id="tab_3">
+                <div class="box box-solid">
+                    <div class="box-body">
+                        <form asp-page="MarkSetting" id="formMark" method="post" class="form-horizontal" enctype="multipart/form-data" onsubmit="return false;">
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">当前水印</label>
+                                <div class="col-4">
+                                    <img src="~/mark_logo.png" alt=""/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">水印图片</label>
+                                <div class="col-sm-4  no-padding">
+                                    <input type="file" name="file" data-val="true" data-val-required="请选择图片文件" class="form-control" value="" />
+                                    <div class="help-block">水印文件最好png透明背景，白色图案，最好不大于20kb</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2">
+                                    <button class="btn btn-sm btn-success"><i class="fa fa-save"></i>保存</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <div class="box box-solid">
+                    <div class="box-body">
+                        
+                        <form asp-page="MarkSetting" asp-page-handler="BaseMap" id="form404" method="post" class="form-horizontal" enctype="multipart/form-data" onsubmit="return false;">
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">当前底图</label>
+                                <div class="col-4">
+                                    <img src="~/img_404_orrer.png" alt="" width="200" />
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">底图</label>
+                                <div class="col-sm-4 no-padding">
+                                    <input type="file" name="file" data-val="true" data-val-required="请选择图片文件" class="form-control" value="" />
+                                    <div class="help-block">地图尽可能小，灰色背景</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2">
+                                    <button class="btn btn-sm btn-info"><i class="fa fa-save"></i>保存</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </div>
             <!-- /.tab-pane --> 
             <!-- /.tab-pane -->
         </div>
@@ -108,6 +164,15 @@
                 }
             });
         }
+        $('#formMark,#form404').submit(function () {
+            if ($(this).valid()) {
+                var load = layer.load(2);
+                $(this).ajaxSubmit(function (res) {
+                    layer.close(load);
+                    layer.msg(res.Message, { icon: res.Code === 0 ? 1 : 2 });
+                });
+            }
+        });
     });
 </script>
 
