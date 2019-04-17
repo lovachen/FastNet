@@ -80,11 +80,8 @@ namespace AiBao.Framework
             //启用redis或者内存缓存,默认使用内存缓存
             services.AddRedisOrMemoryCache(Configuration);
             //
-            //Mapper.Initialize(x => x.AddProfile<MappingProfile>());
-            services.AddAutoMapper(opts =>
-            {
-                //opts.AddProfile<MappingProfile>();
-            });
+            Mapper.Initialize(x => x.AddProfile<MappingProfile>());
+            services.AddAutoMapper();
 
             //启用JWT
             services.AddJwt(_hosting);
