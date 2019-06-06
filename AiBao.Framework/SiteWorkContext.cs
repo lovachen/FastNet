@@ -17,12 +17,12 @@ namespace AiBao.Framework
         public SiteWorkContext(SettingService settingService)
         {
             _settingService = settingService;
-            Settings = _settingService.GetMasterSettings();
+            this.Settings = _settingService.GetMasterSettings();
         }
 
         /// <summary>
         /// 配置
         /// </summary>
-        public SiteSettings Settings { get; }
+        public SiteSettings Settings;
     }
 }
