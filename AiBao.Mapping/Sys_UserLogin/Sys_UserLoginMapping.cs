@@ -17,12 +17,10 @@ namespace AiBao.Mapping
         [StringLength(50)]
         [DataMember]
         public string IpAddress { get; set; }
-
         [Column(TypeName = "datetime")]
         public DateTime? LoginTime { get; set; }
 
         public bool Status { get; set; }
-
 
         #region 扩展
 
